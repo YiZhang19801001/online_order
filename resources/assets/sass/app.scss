@@ -4,12 +4,16 @@
 // Variables
 @import "variables";
 
+@font-face {
+  font-family: "PingFang";
+  src: url("/table/public/fonts/pingfang/苹方黑体-中粗-简.ttf");
+}
 // Bootstrap
 // @import "~bootstrap-sass/assets/stylesheets/bootstrap";
 
 * {
   box-sizing: border-box;
-  font-family: "Montserrat", sans-serif;
+  font-family: "PingFang", "Montserrat", sans-serif;
 }
 body {
   margin: 0;

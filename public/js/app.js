@@ -71996,7 +71996,7 @@ var Confirm = function (_Component) {
                   },
                   className: "cancel-button"
                 },
-                this.props.app_conf.continue_order
+                this.props.app_conf.cancel
               ),
               __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 "div",

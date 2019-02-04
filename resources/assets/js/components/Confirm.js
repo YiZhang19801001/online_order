@@ -162,7 +162,7 @@ export default class Confirm extends Component {
                   }}
                   className="cancel-button"
                 >
-                  {this.props.app_conf.continue_order}
+                  {this.props.app_conf.cancel}
                 </div>
                 <div onClick={this.confirmOrder} className="confirm-button">
                   {this.props.app_conf.confirm_order}
