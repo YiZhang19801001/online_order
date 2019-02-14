@@ -71831,7 +71831,8 @@ var Confirm = function (_Component) {
       shoppingCartList: [],
       orderId: "",
       tableId: "",
-      isShowConfirm: false
+      isShowConfirm: false,
+      allowSubmit: true
     };
 
     _this.createQrCode = _this.createQrCode.bind(_this);
@@ -71914,26 +71915,26 @@ var Confirm = function (_Component) {
     value: function confirmOrder() {
       var _this2 = this;
 
-      __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post("/table/public/api/confirm", {
-        orderList: this.state.shoppingCartList,
-        order_id: this.props.match.params.orderId,
-        store_id: "4",
-        store_name: "some store",
-        store_url: "http://kidsnparty.com.au/table/public",
-        total: this.getTotalPrice(),
-        paymentMethod: "Dive in",
-        v: this.props.v,
-        lang: this.props.lang,
-        userId: this.props.userId
-      }).then(function (res) {
-        // res example: {"historyList":[{"item":{"product_id":5,"name":"\u9c8d\u9c7c\u571f\u9e21\u9505","price":"14.80","upc":"0105","description":null,"image":"default_product.jpg","choices":[{"type_id":9998,"type":"Option","choices":[{"product_ext_id":5195,"name":"\u8d70\u9c7c\u7247","price":"0.00","barcode":"E15","image":"default_taste.png"},{"product_ext_id":5108,"name":"\u7279\u9ebb","price":"0.00","barcode":"E06","image":"default_taste.png"},{"product_ext_id":5104,"name":"\u52a0\u9ebb","price":"0.00","barcode":"E02","image":"default_taste.png"},{"product_ext_id":5105,"name":"\u7279\u8fa3","price":"0.00","barcode":"E03","image":"default_taste.png"},{"product_ext_id":5194,"name":"\u8d70\u8471","price":"0.00","barcode":"E14","image":"default_taste.png"},{"product_ext_id":5103,"name":"\u52a0\u8fa3","price":"0.00","barcode":"E01","image":"default_taste.png"}],"pickedChoice":["{\"product_ext_id\":5108,\"name\":\"\u7279\u9ebb\",\"price\":\"0.00\",\"barcode\":\"E06\",\"image\":\"default_taste.png\"}","{\"product_ext_id\":5104,\"name\":\"\u52a0\u9ebb\",\"price\":\"0.00\",\"barcode\":\"E02\",\"image\":\"default_taste.png\"}"]}],"options":[]},"quantity":1}]}
-
-        // todo:: set it to app.state
-        _this2.props.updateHistoryCartList(res.data.historyList);
-        _this2.props.history.push("/table/public/complete/" + _this2.props.match.params.tableId + "/" + _this2.props.match.params.orderId);
-      }).catch(function (err) {
-        alert(err.reponse.data);
-      });
+      if (this.state.allowSubmit) {
+        this.setState({ allowSubmit: false });
+        __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post("/table/public/api/confirm", {
+          orderList: this.state.shoppingCartList,
+          order_id: this.props.match.params.orderId,
+          store_id: "4",
+          store_name: "some store",
+          store_url: "http://kidsnparty.com.au/table/public",
+          total: this.getTotalPrice(),
+          paymentMethod: "Dive in",
+          v: this.props.v,
+          lang: this.props.lang,
+          userId: this.props.userId
+        }).then(function (res) {
+          _this2.props.updateHistoryCartList(res.data.historyList);
+          _this2.props.history.push("/table/public/complete/" + _this2.props.match.params.tableId + "/" + _this2.props.match.params.orderId);
+        }).catch(function (err) {
+          alert(err.reponse.data);
+        });
+      }
     }
   }, {
     key: "render",
