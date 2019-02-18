@@ -148,15 +148,24 @@ export default class Confirm extends Component {
           <div className="confirm-modal">
             <div className="order-confirm-dialog">
               <div className="order-confirm-icon">
-                <img src="/table/public/images/layout/error.png" alt="" />
+                <img
+                  src="/table/public/images/layout/confirm_order.png"
+                  alt=""
+                  className="order-confirm-icon__img"
+                />
                 <span className="order-confirm-title">
-                  Order will be Submit!
+                  Order will be Submitted
                 </span>
               </div>
               <div className="order-confirm-message">
-                {`Are you sure to submit this order!`}
+                {`Are you sure to submit`}
+                <br />
+                {`this order`}
               </div>
               <div className="button-pannel">
+                <div onClick={this.confirmOrder} className="confirm-button">
+                  {this.props.app_conf.confirm_order}
+                </div>
                 <div
                   onClick={() => {
                     this.setState({ isShowConfirm: false });
@@ -164,9 +173,6 @@ export default class Confirm extends Component {
                   className="cancel-button"
                 >
                   {this.props.app_conf.cancel}
-                </div>
-                <div onClick={this.confirmOrder} className="confirm-button">
-                  {this.props.app_conf.confirm_order}
                 </div>
               </div>
             </div>

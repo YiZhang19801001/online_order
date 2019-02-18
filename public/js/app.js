@@ -60804,7 +60804,7 @@ var warning = __webpack_require__(1);
 
 var ReactComponentTreeHook;
 
-if (typeof process !== 'undefined' && Object({"MIX_APP_LAN":"1","MIX_PUSHER_APP_CLUSTER":"ap1","MIX_PUSHER_APP_KEY":"da53128c54079c5c7c40","MIX_SHOW_OPTIONS":"false","NODE_ENV":"development"}) && "development" === 'test') {
+if (typeof process !== 'undefined' && Object({"NODE_ENV":"development"}) && "development" === 'test') {
   // Temporary hack.
   // Inline requires don't work well with Jest:
   // https://github.com/facebook/react/issues/7240
@@ -62719,7 +62719,7 @@ var warning = __webpack_require__(1);
 
 var ReactComponentTreeHook;
 
-if (typeof process !== 'undefined' && Object({"MIX_APP_LAN":"1","MIX_PUSHER_APP_CLUSTER":"ap1","MIX_PUSHER_APP_KEY":"da53128c54079c5c7c40","MIX_SHOW_OPTIONS":"false","NODE_ENV":"development"}) && "development" === 'test') {
+if (typeof process !== 'undefined' && Object({"NODE_ENV":"development"}) && "development" === 'test') {
   // Temporary hack.
   // Inline requires don't work well with Jest:
   // https://github.com/facebook/react/issues/7240
@@ -63779,7 +63779,7 @@ var warning = __webpack_require__(1);
 
 var ReactComponentTreeHook;
 
-if (typeof process !== 'undefined' && Object({"MIX_APP_LAN":"1","MIX_PUSHER_APP_CLUSTER":"ap1","MIX_PUSHER_APP_KEY":"da53128c54079c5c7c40","MIX_SHOW_OPTIONS":"false","NODE_ENV":"development"}) && "development" === 'test') {
+if (typeof process !== 'undefined' && Object({"NODE_ENV":"development"}) && "development" === 'test') {
   // Temporary hack.
   // Inline requires don't work well with Jest:
   // https://github.com/facebook/react/issues/7240
@@ -63986,7 +63986,7 @@ var warning = __webpack_require__(1);
 
 var ReactComponentTreeHook;
 
-if (typeof process !== 'undefined' && Object({"MIX_APP_LAN":"1","MIX_PUSHER_APP_CLUSTER":"ap1","MIX_PUSHER_APP_KEY":"da53128c54079c5c7c40","MIX_SHOW_OPTIONS":"false","NODE_ENV":"development"}) && "development" === 'test') {
+if (typeof process !== 'undefined' && Object({"NODE_ENV":"development"}) && "development" === 'test') {
   // Temporary hack.
   // Inline requires don't work well with Jest:
   // https://github.com/facebook/react/issues/7240
@@ -71974,21 +71974,32 @@ var Confirm = function (_Component) {
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               "div",
               { className: "order-confirm-icon" },
-              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("img", { src: "/table/public/images/layout/error.png", alt: "" }),
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("img", {
+                src: "/table/public/images/layout/confirm_order.png",
+                alt: "",
+                className: "order-confirm-icon__img"
+              }),
               __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 "span",
                 { className: "order-confirm-title" },
-                "Order will be Submit!"
+                "Order will be Submitted"
               )
             ),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               "div",
               { className: "order-confirm-message" },
-              "Are you sure to submit this order!"
+              "Are you sure to submit",
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("br", null),
+              "this order"
             ),
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               "div",
               { className: "button-pannel" },
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                "div",
+                { onClick: this.confirmOrder, className: "confirm-button" },
+                this.props.app_conf.confirm_order
+              ),
               __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 "div",
                 {
@@ -71998,11 +72009,6 @@ var Confirm = function (_Component) {
                   className: "cancel-button"
                 },
                 this.props.app_conf.cancel
-              ),
-              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-                "div",
-                { onClick: this.confirmOrder, className: "confirm-button" },
-                this.props.app_conf.confirm_order
               )
             )
           )
