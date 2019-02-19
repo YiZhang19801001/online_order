@@ -118,7 +118,7 @@ export default class ProductCard extends Component {
             onClick={isSimpleProduct ? this.decrease : null}
             className="btn-sub"
           >
-            <ButtonDecrease mode="fill" isDisable={true} />
+            <ButtonDecrease mode="fill" isDisable={!isSimpleProduct} />
           </div>
           <span className="number-quantity">{this.state.quantity}</span>
           <div
@@ -130,11 +130,11 @@ export default class ProductCard extends Component {
         </div>
       ) : (
         <div className="control-pannel">
-          <div
-            onClick={isSimpleProduct ? this.increase : this.makeChoice}
-            className="btn-plus-only"
-          >
-            <ButtonIncrease mode="fill" />
+          <div className="btn-plus-only">
+            <ButtonIncrease
+              onClick={isSimpleProduct ? this.increase : this.makeChoice}
+              mode="fill"
+            />
           </div>
         </div>
       );

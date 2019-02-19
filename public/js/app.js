@@ -30888,7 +30888,7 @@ var ButtonIncrease = function (_Component) {
         { className: "button-increase " + this.props.mode },
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "i",
-          { className: "material-icons" },
+          { onClick: this.props.onClick, className: "material-icons" },
           "add"
         )
       );
@@ -60804,7 +60804,7 @@ var warning = __webpack_require__(1);
 
 var ReactComponentTreeHook;
 
-if (typeof process !== 'undefined' && Object({"NODE_ENV":"development"}) && "development" === 'test') {
+if (typeof process !== 'undefined' && Object({"MIX_APP_LAN":"1","MIX_PUSHER_APP_CLUSTER":"ap1","MIX_PUSHER_APP_KEY":"da53128c54079c5c7c40","MIX_SHOW_OPTIONS":"false","NODE_ENV":"development"}) && "development" === 'test') {
   // Temporary hack.
   // Inline requires don't work well with Jest:
   // https://github.com/facebook/react/issues/7240
@@ -62719,7 +62719,7 @@ var warning = __webpack_require__(1);
 
 var ReactComponentTreeHook;
 
-if (typeof process !== 'undefined' && Object({"NODE_ENV":"development"}) && "development" === 'test') {
+if (typeof process !== 'undefined' && Object({"MIX_APP_LAN":"1","MIX_PUSHER_APP_CLUSTER":"ap1","MIX_PUSHER_APP_KEY":"da53128c54079c5c7c40","MIX_SHOW_OPTIONS":"false","NODE_ENV":"development"}) && "development" === 'test') {
   // Temporary hack.
   // Inline requires don't work well with Jest:
   // https://github.com/facebook/react/issues/7240
@@ -63779,7 +63779,7 @@ var warning = __webpack_require__(1);
 
 var ReactComponentTreeHook;
 
-if (typeof process !== 'undefined' && Object({"NODE_ENV":"development"}) && "development" === 'test') {
+if (typeof process !== 'undefined' && Object({"MIX_APP_LAN":"1","MIX_PUSHER_APP_CLUSTER":"ap1","MIX_PUSHER_APP_KEY":"da53128c54079c5c7c40","MIX_SHOW_OPTIONS":"false","NODE_ENV":"development"}) && "development" === 'test') {
   // Temporary hack.
   // Inline requires don't work well with Jest:
   // https://github.com/facebook/react/issues/7240
@@ -63986,7 +63986,7 @@ var warning = __webpack_require__(1);
 
 var ReactComponentTreeHook;
 
-if (typeof process !== 'undefined' && Object({"NODE_ENV":"development"}) && "development" === 'test') {
+if (typeof process !== 'undefined' && Object({"MIX_APP_LAN":"1","MIX_PUSHER_APP_CLUSTER":"ap1","MIX_PUSHER_APP_KEY":"da53128c54079c5c7c40","MIX_SHOW_OPTIONS":"false","NODE_ENV":"development"}) && "development" === 'test') {
   // Temporary hack.
   // Inline requires don't work well with Jest:
   // https://github.com/facebook/react/issues/7240
@@ -70982,7 +70982,7 @@ var ProductCard = function (_Component) {
             onClick: isSimpleProduct ? this.decrease : null,
             className: "btn-sub"
           },
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__ButtonDecrease__["a" /* default */], { mode: "fill", isDisable: true })
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__ButtonDecrease__["a" /* default */], { mode: "fill", isDisable: !isSimpleProduct })
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "span",
@@ -71002,11 +71002,11 @@ var ProductCard = function (_Component) {
         { className: "control-pannel" },
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "div",
-          {
+          { className: "btn-plus-only" },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__ButtonIncrease__["a" /* default */], {
             onClick: isSimpleProduct ? this.increase : this.makeChoice,
-            className: "btn-plus-only"
-          },
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__ButtonIncrease__["a" /* default */], { mode: "fill" })
+            mode: "fill"
+          })
         )
       );
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -71536,28 +71536,37 @@ var ShoppingCart = function (_Component) {
           _this2.props.redirectToMenu(err.response.data.message);
         });
 
-        Echo.channel("tableOrder").listen("UpdateOrder", function (e) {
-          if (e.orderId == _this2.props.orderId && e.userId !== _this2.props.userId) {
-            if (e.action == "update") {
-              __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post("/table/public/api/initcart", {
-                order_id: _this2.props.orderId,
-                cdt: _this2.props.cdt,
-                v: _this2.props.v,
-                table_id: _this2.props.tableNumber,
-                lang: localStorage.getItem("aupos_language_code")
-              }).then(function (res) {
-                // this.setState({ shoppingCartList: res.data.pending_list });
-                _this2.props.updateOrderList(res.data.pendingList);
-                _this2.props.updateHistoryCartList(res.data.historyList);
-                // this.setState({ orderShoppingCartList: res.data.ordered_list });
-              }).catch(function (err) {
-                window.location.reload();
-              });
-            } else {
-              _this2.props.updateShoppingCartList(false, e.orderItem, "table", e.action, _this2.props.orderId, _this2.props.tableNumber);
-            }
-          }
-        });
+        // Echo.channel("tableOrder").listen("UpdateOrder", e => {
+        //   if (e.orderId == this.props.orderId && e.userId !== this.props.userId) {
+        //     if (e.action == "update") {
+        //       Axios.post(`/table/public/api/initcart`, {
+        //         order_id: this.props.orderId,
+        //         cdt: this.props.cdt,
+        //         v: this.props.v,
+        //         table_id: this.props.tableNumber,
+        //         lang: localStorage.getItem("aupos_language_code")
+        //       })
+        //         .then(res => {
+        //           // this.setState({ shoppingCartList: res.data.pending_list });
+        //           this.props.updateOrderList(res.data.pendingList);
+        //           this.props.updateHistoryCartList(res.data.historyList);
+        //           // this.setState({ orderShoppingCartList: res.data.ordered_list });
+        //         })
+        //         .catch(err => {
+        //           window.location.reload();
+        //         });
+        //     } else {
+        //       this.props.updateShoppingCartList(
+        //         false,
+        //         e.orderItem,
+        //         "table",
+        //         e.action,
+        //         this.props.orderId,
+        //         this.props.tableNumber
+        //       );
+        //     }
+        //   }
+        // });
       }
     }
   }, {
@@ -71834,7 +71843,6 @@ var Confirm = function (_Component) {
       isShowConfirm: false,
       allowSubmit: true
     };
-
     _this.createQrCode = _this.createQrCode.bind(_this);
     _this.getOrderItemQuantityTotal = _this.getOrderItemQuantityTotal.bind(_this);
     _this.getTotalPrice = _this.getTotalPrice.bind(_this);
@@ -73486,27 +73494,27 @@ var Complete = function (_Component) {
   _createClass(Complete, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this2 = this;
-
       this.setState({ shoppingCartList: this.props.historyCartList });
 
-      Echo.channel("tableOrder").listen("ConfirmOrder", function (e) {
-        console.log("listened");
-        if (e.orderId == _this2.props.orderId) {
-          __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post("/table/public/api/initcart", {
-            order_id: _this2.props.orderId,
-            cdt: _this2.props.cdt,
-            v: _this2.props.v,
-            table_id: _this2.props.tableNumber,
-            lang: 1
-          }).then(function (res) {
-            _this2.props.updateOrderList(res.data.pendingList);
-            _this2.props.updateHistoryList(res.data.historyList);
-          }).catch(function (err) {
-            _this2.props.redirectToMenu(err.response.data.message);
-          });
-        }
-      });
+      // Echo.channel("tableOrder").listen("ConfirmOrder", e => {
+      //   console.log("listened");
+      //   if (e.orderId == this.props.orderId) {
+      //     Axios.post(`/table/public/api/initcart`, {
+      //       order_id: this.props.orderId,
+      //       cdt: this.props.cdt,
+      //       v: this.props.v,
+      //       table_id: this.props.tableNumber,
+      //       lang: 1
+      //     })
+      //       .then(res => {
+      //         this.props.updateOrderList(res.data.pendingList);
+      //         this.props.updateHistoryList(res.data.historyList);
+      //       })
+      //       .catch(err => {
+      //         this.props.redirectToMenu(err.response.data.message);
+      //       });
+      //   }
+      // });
     }
   }, {
     key: "componentWillReceiveProps",
@@ -73521,7 +73529,7 @@ var Complete = function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this2 = this;
 
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         "div",
@@ -73567,7 +73575,7 @@ var Complete = function (_Component) {
               key: "completeOrderItem" + index,
               orderItem: orderItem,
               mode: 3,
-              app_conf: _this3.props.app_conf
+              app_conf: _this2.props.app_conf
             });
           })
         )

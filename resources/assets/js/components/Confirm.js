@@ -17,7 +17,6 @@ export default class Confirm extends Component {
       isShowConfirm: false,
       allowSubmit: true
     };
-
     this.createQrCode = this.createQrCode.bind(this);
     this.getOrderItemQuantityTotal = this.getOrderItemQuantityTotal.bind(this);
     this.getTotalPrice = this.getTotalPrice.bind(this);

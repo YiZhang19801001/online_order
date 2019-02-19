@@ -8,7 +8,9 @@ export default class ButtonIncrease extends Component {
   render() {
     return (
       <div className={`button-increase ${this.props.mode}`}>
-        <i className="material-icons">{"add"}</i>
+        <i onClick={this.props.onClick} className="material-icons">
+          {"add"}
+        </i>
       </div>
     );
   }

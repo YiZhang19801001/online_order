@@ -14,25 +14,25 @@ export default class Complete extends Component {
   componentDidMount() {
     this.setState({ shoppingCartList: this.props.historyCartList });
 
-    Echo.channel("tableOrder").listen("ConfirmOrder", e => {
-      console.log("listened");
-      if (e.orderId == this.props.orderId) {
-        Axios.post(`/table/public/api/initcart`, {
-          order_id: this.props.orderId,
-          cdt: this.props.cdt,
-          v: this.props.v,
-          table_id: this.props.tableNumber,
-          lang: 1
-        })
-          .then(res => {
-            this.props.updateOrderList(res.data.pendingList);
-            this.props.updateHistoryList(res.data.historyList);
-          })
-          .catch(err => {
-            this.props.redirectToMenu(err.response.data.message);
-          });
-      }
-    });
+    // Echo.channel("tableOrder").listen("ConfirmOrder", e => {
+    //   console.log("listened");
+    //   if (e.orderId == this.props.orderId) {
+    //     Axios.post(`/table/public/api/initcart`, {
+    //       order_id: this.props.orderId,
+    //       cdt: this.props.cdt,
+    //       v: this.props.v,
+    //       table_id: this.props.tableNumber,
+    //       lang: 1
+    //     })
+    //       .then(res => {
+    //         this.props.updateOrderList(res.data.pendingList);
+    //         this.props.updateHistoryList(res.data.historyList);
+    //       })
+    //       .catch(err => {
+    //         this.props.redirectToMenu(err.response.data.message);
+    //       });
+    //   }
+    // });
   }
 
   componentWillReceiveProps(newProps) {
