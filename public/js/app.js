@@ -70860,6 +70860,7 @@ module.exports = function (encodedURI) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ChoiceForm__ = __webpack_require__(291);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ButtonIncrease__ = __webpack_require__(123);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ButtonDecrease__ = __webpack_require__(124);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ProductDetails__ = __webpack_require__(311);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -70867,6 +70868,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 
 
 
@@ -70971,6 +70973,8 @@ var ProductCard = function (_Component) {
   }, {
     key: "render",
     value: function render() {
+      var _this3 = this;
+
       var isSimpleProduct = this.props.product.options.length == 0 && this.props.product.choices.length == 0 ? true : false;
 
       var Control_Pannel = this.state.quantity > 0 ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -71012,12 +71016,15 @@ var ProductCard = function (_Component) {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         "div",
         { className: "product-card" },
+        this.state.isZoomInPic ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__ProductDetails__["a" /* default */], {
+          product: this.props.product,
+          close: function close() {
+            _this3.setState({ isZoomInPic: false });
+          }
+        }) : null,
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "div",
-          {
-            onClick: this.changePicSize,
-            className: this.state.isZoomInPic ? "img-xl-container" : "img-container"
-          },
+          { onClick: this.changePicSize, className: "img-container" },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("img", {
             src: "/table/public/images/items/" + this.props.product.image,
             alt: this.props.product.name
@@ -73991,6 +73998,55 @@ var Setting = function (_Component) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 307 */,
+/* 308 */,
+/* 309 */,
+/* 310 */,
+/* 311 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+
+
+var ProductDetails = function ProductDetails(_ref) {
+  var product = _ref.product,
+      close = _ref.close;
+
+  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+    "div",
+    { className: "component-product-details", onClick: close },
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      "div",
+      { className: "component-product-details__container" },
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("img", {
+        className: "component-product-details__image",
+        src: "/table/public/images/items/" + product.image,
+        alt: ""
+      }),
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        "div",
+        { className: "component-product-details__information" },
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "div",
+          { className: "component-product-details__information__name" },
+          product.name
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "div",
+          { className: "component-product-details__information__price" },
+          "$",
+          product.price
+        )
+      )
+    )
+  );
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (ProductDetails);
 
 /***/ })
 /******/ ]);

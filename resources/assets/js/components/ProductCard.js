@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import ChoiceForm from "./ChoiceForm";
 import ButtonIncrease from "./ButtonIncrease";
 import ButtonDecrease from "./ButtonDecrease";
+import ProductDetails from "./ProductDetails";
 
 export default class ProductCard extends Component {
   constructor(props) {
@@ -140,12 +141,15 @@ export default class ProductCard extends Component {
       );
     return (
       <div className="product-card">
-        <div
-          onClick={this.changePicSize}
-          className={
-            this.state.isZoomInPic ? "img-xl-container" : "img-container"
-          }
-        >
+        {this.state.isZoomInPic ? (
+          <ProductDetails
+            product={this.props.product}
+            close={() => {
+              this.setState({ isZoomInPic: false });
+            }}
+          />
+        ) : null}
+        <div onClick={this.changePicSize} className={"img-container"}>
           <img
             src={`/table/public/images/items/${this.props.product.image}`}
             alt={this.props.product.name}
