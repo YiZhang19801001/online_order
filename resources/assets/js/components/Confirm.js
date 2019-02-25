@@ -116,7 +116,7 @@ export default class Confirm extends Component {
           );
         })
         .catch(err => {
-          alert(err.reponse.data);
+          alert("Server is busy, try later.");
         });
     }
   }
