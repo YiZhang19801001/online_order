@@ -475,14 +475,16 @@ class OrderController extends Controller
     public function confirmOrder(Request $request)
     {
         $order_id = $request->order_id;
-        $block_list = config("app.block_list");
-        $block_list_keep = $block_list;
-        if (in_array($order_id, $block_list)) {
-            return response()->json(["message" => "Server is Busy, Try Later!"], 400);
+
+        $order = TempOrder::where('id', $order_id)->first();
+
+        $shortHistoryList = json_decode($order->order_list_string)->historyList;
+        $shortPendingList = json_decode($order->order_list_string)->pendingList;
+
+        if(count($shortPendingList)===0){
+            return response()->json(["historyList" => $this->extendsList($shortHistoryList, $request->lang)], 200);
         }
-        array_push($block_list, $order_id);
-        config(['app.block_list' => $block_list]);
-        return response()->json(["block_list_keep" => $block_list_keep, "block_list" => $block_list], 200);
+       
         /**request is an array of  */
         //get new order
         $new_order = $this->createOcOrderHelper($request);
@@ -504,10 +506,6 @@ class OrderController extends Controller
         //update temp_order_item
         $returnHistoryList = $this->changeTempOrderItemsStatus($request->order_id, $request->orderList);
         broadcast(new UpdateOrder($request->order_id, null, $request->userId, 'update'));
-
-        $array_key = array_search($order_id, $block_list);
-        unset($block_list[$array_key]);
-        config(['app.block_list' => $block_list]);
 
         return response()->json(["historyList" => $this->extendsList($returnHistoryList, $request->lang)], 200);
 
@@ -713,35 +711,9 @@ class OrderController extends Controller
 
                     }
 
-                    // else
-                    // {
-                    //     $new_order_ext->product_ext_id = 9999;
-
-                    //     $new_order_ext->order_product_id = $new_order_product->id;
-                    //     $new_order_ext->product_id = $order_product["item"]["product_id"];
-
-                    // }
 
                 }
-                /**store picked options in DB*/
-                // if(count($order_product["item"]["options"])>0){
-                //     foreach ($order_product["item"]["options"] as $option) {
-                //         die(json_encode($option));
-                //         $new_order_option = new OrderOption;
-                //         $new_order_option->order_id = $order_id;
-                //         $new_order_option->order_product_id = $new_order_product->id;
 
-                //         $new_order_option->product_option_id = $option["option_id"];
-
-                //         $new_order_option->product_option_value_id = $option["product_option_value_id"];
-                //         $new_order_option->name = $option["option_name"];
-                //         $new_order_option->value = $option["pickedOption"];
-                //         $new_order_option->type = "radio";
-
-                //         $new_order_option->save();
-                //     }
-
-                // }
             }
 
         }

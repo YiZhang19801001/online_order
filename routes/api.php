@@ -37,5 +37,7 @@ Route::post('mysql', 'MySqlController@index');
 Route::get('geturl', 'InitController@makeNewTableOrderUrl');
 
 Route::get('test/{mode}', 'testController@changeConfigValue');
+Route::get("lock", "testController@lockForSelect");
+Route::get("instance", "testController@instanceForSelect");
 Route::post('language', 'testController@changeText');
 Route::post('translate', 'ShopcartController@translatePreorderList');

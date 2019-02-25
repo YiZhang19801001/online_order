@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 
 class testController extends Controller
@@ -33,8 +34,8 @@ class testController extends Controller
         /**return to client side */
         return response()->json(['message' => 'theme changed to ' . $mode . ' !'], 200);
     }
-	
-	public function changeText(Request $request)
+
+    public function changeText(Request $request)
     {
         $path_cn = "/home1/ozwearug/public_html/kidsnpartycom/table/config/language_cn.php";
         $path_en = "/home1/ozwearug/public_html/kidsnpartycom/table/config/language_en.php";
@@ -57,5 +58,33 @@ class testController extends Controller
         $language_cn = \Config::get('language_cn.preorder_title');
         $language_en = \Config::get('language_en.preorder_title');
         return response()->json(['message' => "perorder title change to [cn:$language_cn,en:$language_en]"]);
+    }
+
+    /**
+     * test laravel Pessimistic Locking
+     */
+    public function lockForSelect(Request $request)
+    {
+        $user = \DB::transaction(function () use ($request) {
+            if ($request->v === "abc") {
+                $user = User::lockForUpdate()->find(1);
+                sleep(10);
+                $user->code = $request->code;
+                $user->save();
+            } else {
+                $user = User::lockForUpdate()->find(1);
+                $user->code = $request->code;
+                $user->save();
+            }
+
+            return $user;
+        });
+        return response()->json(compact("user"), 200);
+
+    }
+
+    public function instanceForSelect(Request $request)
+    {
+
     }
 }
