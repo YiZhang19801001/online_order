@@ -476,12 +476,13 @@ class OrderController extends Controller
     {
         $order_id = $request->order_id;
         $block_list = config("app.block_list");
+        $block_list_keep = $block_list;
         if (in_array($order_id, $block_list)) {
             return response()->json(["message" => "Server is Busy, Try Later!"], 400);
         }
         array_push($block_list, $order_id);
         config(['app.block_list' => $block_list]);
-
+        return response()->json(["block_list_keep" => $block_list_keep, "block_list" => $block_list], 200);
         /**request is an array of  */
         //get new order
         $new_order = $this->createOcOrderHelper($request);
