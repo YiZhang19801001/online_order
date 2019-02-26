@@ -475,16 +475,32 @@ class OrderController extends Controller
     public function confirmOrder(Request $request)
     {
         $order_id = $request->order_id;
+        // $block_list = config("app.block_list");
+        // if (in_array($order_id, $block_list)) {
+        //     return response()->json(["message" => $block_list], 400);
+        // }
+        // array_push($block_list, $order_id);
+        // // $path = "/home1/ozwearug/public_html/kidsnpartycom/table/config/app.php";
+        // $path = "http:/localhost/table/config/app.php";
+        // file_put_contents(
+        //     $path, str_replace(
+        //         "'block_list' => " . "'" . json_encode(\Config::get('app.block_list')) . "'",
+        //         "'block_list' => " . "'" . json_encode($block_list) . "'",
+        //         file_get_contents($path)
+        //     )
+        // );
 
         $order = TempOrder::where('id', $order_id)->first();
 
         $shortHistoryList = json_decode($order->order_list_string)->historyList;
         $shortPendingList = json_decode($order->order_list_string)->pendingList;
 
-        if(count($shortPendingList)===0){
-            return response()->json(["historyList" => $this->extendsList($shortHistoryList, $request->lang)], 200);
+        if (count($shortPendingList) === 0) {
+            return response()->json(["historyList" => $this->extendsList($shortHistoryList, $request->lang), "status" => "busy"], 200);
         }
-       
+
+        $orderList = $this->extendsList($shortPendingList, $request->lang);
+
         /**request is an array of  */
         //get new order
         $new_order = $this->createOcOrderHelper($request);
@@ -498,16 +514,27 @@ class OrderController extends Controller
         $this->createOrderTotalHelper($order_id, $value);
 
         //create record in oc_order_product
-        $this->createOrderProductHelper($request->orderList, $order_id);
+        $this->createOrderProductHelper($orderList, $order_id);
 
         //create record in oc_table_linksub
         $this->createOrderLinkSubHelper($new_order, $request->v);
 
         //update temp_order_item
-        $returnHistoryList = $this->changeTempOrderItemsStatus($request->order_id, $request->orderList);
+        $returnHistoryList = $this->changeTempOrderItemsStatus($request->order_id, $orderList);
         broadcast(new UpdateOrder($request->order_id, null, $request->userId, 'update'));
 
-        return response()->json(["historyList" => $this->extendsList($returnHistoryList, $request->lang)], 200);
+        // $index = array_search($order_id, $block_list);
+
+        // unset($block_list[$index]);
+        // file_put_contents(
+        //     $path, str_replace(
+        //         "'block_list' => " . "'" . \Config::get('app.block_list') . "'",
+        //         "'block_list' => " . "'" . $block_list . "'",
+        //         file_get_contents($path)
+        //     )
+        // );
+
+        return response()->json(["historyList" => $this->extendsList($returnHistoryList, $request->lang), "status" => "commited"], 200);
 
     }
 
@@ -519,9 +546,10 @@ class OrderController extends Controller
         $orderHistoryListArr = $orderArr->historyList;
         $dryOrderList = [];
         foreach ($orderList as $orderItem) {
-            array_push($dryOrderList, json_decode(json_encode(['item' => $this->dryOrderItem($orderItem['item']), 'quantity' => $orderItem['quantity']])));
+            array_push($dryOrderList, json_decode(json_encode(['item' => $this->dryOrderItem($orderItem->item), 'quantity' => $orderItem->quantity])));
         }
-        $orderArr->historyList = array_merge($orderHistoryListArr, $dryOrderList);
+        // $orderArr->historyList = array_merge($orderHistoryListArr, $dryOrderList);
+        $orderArr->historyList = $dryOrderList;
         $orderArr->pendingList = [];
         $order->order_list_string = json_encode($orderArr);
         $order->save();
@@ -684,12 +712,12 @@ class OrderController extends Controller
         foreach ($arr_order_items as $order_product) {
             $new_order_product = new OrderProduct;
             $new_order_product->order_id = $order_id;
-            $new_order_product->product_id = $order_product["item"]["product_id"];
+            $new_order_product->product_id = $order_product->item["product_id"];
             $new_order_product->model = 1;
-            $new_order_product->quantity = $order_product["quantity"];
-            $new_order_product->name = $order_product["item"]["name"];
-            $new_order_product->price = $order_product["item"]["price"];
-            $new_order_product->total = $order_product["quantity"] * (float) $order_product["item"]["price"];
+            $new_order_product->quantity = $order_product->quantity;
+            $new_order_product->name = $order_product->item["name"];
+            $new_order_product->price = $order_product->item["price"];
+            $new_order_product->total = $order_product->quantity * (float) $order_product->item["price"];
             $new_order_product->tax = 0;
             $new_order_product->reward = 0;
 
@@ -697,7 +725,7 @@ class OrderController extends Controller
 
             if (config('app.show_options')) {
                 /**picked choices */
-                foreach ($order_product["item"]["choices"] as $choice) {
+                foreach ($order_product->item["choices"] as $choice) {
 
                     if ($choice["pickedChoice"] !== null) {
 
@@ -705,12 +733,11 @@ class OrderController extends Controller
                             $new_order_ext = new OrderExt;
                             $new_order_ext->product_ext_id = $pickedChoice["product_ext_id"];
                             $new_order_ext->order_product_id = $new_order_product->id;
-                            $new_order_ext->product_id = $order_product["item"]["product_id"];
+                            $new_order_ext->product_id = $order_product->item["product_id"];
                             $new_order_ext->save();
                         }
 
                     }
-
 
                 }
 

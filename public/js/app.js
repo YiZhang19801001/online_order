@@ -71983,7 +71983,7 @@ var Confirm = function (_Component) {
           _this2.props.updateHistoryCartList(res.data.historyList);
           _this2.props.history.push("/table/public/complete/" + _this2.props.match.params.tableId + "/" + _this2.props.match.params.orderId);
         }).catch(function (err) {
-          alert("Server is busy, try later.");
+          window.location.reload();
         });
       }
     }

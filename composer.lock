@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ed38aec92622832fac85a66fc8caa564",
+    "content-hash": "4819323617f0f50143817847a036615a",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -1400,6 +1400,50 @@
                 "uuid"
             ],
             "time": "2018-07-19T23:38:55+00:00"
+        },
+        {
+            "name": "reshadman/laravel-optimistic-locking",
+            "version": "1.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/reshadman/laravel-optimistic-locking.git",
+                "reference": "4842486c03de6edcb8aebe8edc1e935b4772e7af"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/reshadman/laravel-optimistic-locking/zipball/4842486c03de6edcb8aebe8edc1e935b4772e7af",
+                "reference": "4842486c03de6edcb8aebe8edc1e935b4772e7af",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "~5.5.0|~5.6.0",
+                "illuminate/support": "~5.5.0|~5.6.0",
+                "php": "^7.0"
+            },
+            "require-dev": {
+                "ext-pdo_sqlite": "*",
+                "mockery/mockery": "^1.0.0",
+                "orchestra/testbench": "~3.5.0|~3.6.0",
+                "phpunit/phpunit": "^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Reshadman\\OptimisticLocking\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Reza Shadman",
+                    "email": "pcfeeler@gmail.com"
+                }
+            ],
+            "description": "Adds optimistic locking feature to eloquent models.",
+            "time": "2018-06-03T14:35:13+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",

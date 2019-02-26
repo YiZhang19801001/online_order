@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use Illuminate\Http\Request;
 
 class testController extends Controller
@@ -65,26 +64,87 @@ class testController extends Controller
      */
     public function lockForSelect(Request $request)
     {
-        $user = \DB::transaction(function () use ($request) {
-            if ($request->v === "abc") {
-                $user = User::lockForUpdate()->find(1);
-                sleep(10);
-                $user->code = $request->code;
-                $user->save();
-            } else {
-                $user = User::lockForUpdate()->find(1);
-                $user->code = $request->code;
-                $user->save();
-            }
 
-            return $user;
-        });
-        return response()->json(compact("user"), 200);
+        if ($request->v === "aaa") {
+            \DB::beginTransaction();
+
+            $model = \DB::table('oc_user')->where("user_id", 1)->lockForUpdate()->first();
+            sleep(10);
+
+            $model->code = $request->code;
+            // $model->save();
+            \DB::commit();
+
+        } else {
+            \DB::beginTransaction();
+
+            $model = \DB::table('oc_user')->where("user_id", 1)->update(["code" => $request->code]);
+            // $model->code = $request->code . "aaa";
+            // $model->save();
+            \DB::commit();
+
+        }
+
+        return response()->json($model, 200);
+        // $PosDB1 = new PosDB();
+
+        // $sql = "START TRANSACTION ";
+
+        // $PosDB1->ExcuteCmd($sql);
+        // $sql = "SELECT * FROM oc_user WHERE user_id=1 FOR UPDATE";
+
+        // $PosDB1->Query($sql);
+
+        // $sql = "UPDATE oc_user SET code='ddaq'  WHERE user_id=1 ";
+        // $PosDB1->ExcuteCmd($sql);
+
+        // $sql = "SELECT SLEEP(10)";
+        // $PosDB1->Query($sql);
+        // $sql = "COMMIT ";
+        // $PosDB1->ExcuteCmd($sql);
+
+        // $PosDB1->Close();
+
+        // echo "finish2f";
 
     }
 
     public function instanceForSelect(Request $request)
     {
+        \DB::beginTransaction();
+
+        $model = \App\User::lockForUpdate()->find(1);
+        $model->code = $model->code . "aaa";
+        $model->save();
+
+        \DB::commit();
+        return response()->json($model, 200);
+
+//         $PosDB1 = new PosDB();
+        //         $sql = "START TRANSACTION ";
+
+//         $PosDB1->ExcuteCmd($sql);
+        // /*$sql="SELECT * FROM table_lock WHERE code='A01' FOR UPDATE";
+
+// $PosDB1->Query($sql);
+
+//  */
+        //         $sql = "UPDATE oc_user SET code='acc'  WHERE user_id=1 ";
+        //         $PosDB1->ExcuteCmd($sql);
+
+//         $sql = "COMMIT ";
+        //         $PosDB1->ExcuteCmd($sql);
+
+// //$sql = "SELECT * FROM oc_order ORDER BY date_added ";
+        //         /*    $sql="SELECT * FROM table_lock WHERE code='A01'  LOCK IN SHARE MODE";
+        //         $result = $PosDB1->Query($sql);
+        //         print_r($result );
+        //          */
+        //         $PosDB1->Close();
+
+//         // return response()->json(["finished 2"], 200);
+        //         echo "finish1f";
 
     }
+
 }
