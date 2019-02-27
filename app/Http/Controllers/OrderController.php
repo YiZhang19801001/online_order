@@ -29,12 +29,6 @@ class OrderController extends Controller
     {
     }
 
-    /** Todo:
-     * 1. save orderList to database table
-     * 2. create broadcast
-     * 3. get newest order list
-     * */
-
     public function post(Request $request)
     {
         $mode = config('app.show_options');
@@ -475,20 +469,6 @@ class OrderController extends Controller
     public function confirmOrder(Request $request)
     {
         $order_id = $request->order_id;
-        // $block_list = config("app.block_list");
-        // if (in_array($order_id, $block_list)) {
-        //     return response()->json(["message" => $block_list], 400);
-        // }
-        // array_push($block_list, $order_id);
-        // // $path = "/home1/ozwearug/public_html/kidsnpartycom/table/config/app.php";
-        // $path = "http:/localhost/table/config/app.php";
-        // file_put_contents(
-        //     $path, str_replace(
-        //         "'block_list' => " . "'" . json_encode(\Config::get('app.block_list')) . "'",
-        //         "'block_list' => " . "'" . json_encode($block_list) . "'",
-        //         file_get_contents($path)
-        //     )
-        // );
 
         $order = TempOrder::where('id', $order_id)->first();
 
@@ -522,17 +502,6 @@ class OrderController extends Controller
         //update temp_order_item
         $returnHistoryList = $this->changeTempOrderItemsStatus($request->order_id, $orderList);
         broadcast(new UpdateOrder($request->order_id, null, $request->userId, 'update'));
-
-        // $index = array_search($order_id, $block_list);
-
-        // unset($block_list[$index]);
-        // file_put_contents(
-        //     $path, str_replace(
-        //         "'block_list' => " . "'" . \Config::get('app.block_list') . "'",
-        //         "'block_list' => " . "'" . $block_list . "'",
-        //         file_get_contents($path)
-        //     )
-        // );
 
         return response()->json(["historyList" => $this->extendsList($returnHistoryList, $request->lang), "status" => "commited"], 200);
 
@@ -766,10 +735,10 @@ class OrderController extends Controller
     }
     public function update(Request $request)
     {
-        broadcast(new UpdateOrder($request->orderId, $request->orderItem, $request->userId, $request->action));
         $mode = config('app.show_options');
         $new_item = $this->dryOrderItem($request->orderItem);
         $orderRow = TempOrder::where('id', $request->orderId)->first();
+
         // if $order_list_string is null or empty add straight away
         if ($orderRow === null) {
             $orderRow = new TempOrder;
@@ -779,25 +748,19 @@ class OrderController extends Controller
             $orderRow->id = $request->orderId;
             $orderRow->table_number = $request->tableId;
         } else {
+            // return response()->json("row found",200);
             $flag = false;
             $order_list_string = $orderRow->order_list_string;
             $orderArr = json_decode($order_list_string);
             $orderObject = $orderArr->pendingList;
+
             foreach ($orderObject as $orderItem) {
 
                 if ($orderItem->item->product_id === $new_item["product_id"]) {
                     $flag = true;
-                    // if (count($orderItem->item->options) > 0) {
-                    //     for ($i = 0; $i < count($orderItem->item->options) - 1; $i++) {
-                    //         if ($orderItem->item->options[i]["pickedOption"] !== $new_item["options"][i]["pickedOption"]) {
-                    //             $flag = false;
-                    //             break;
-                    //         }
-                    //     }
-                    // }
-                    if ($flag === false || count($orderItem->item->choices) < 1) {
-                        break;
-                    } else {
+
+                    if (count($orderItem->item->choices) > 0) {
+
                         for ($i = 0; $i < count($orderItem->item->choices); $i++) {
                             if ($orderItem->item->choices[$i]->pickedChoice != $new_item["choices"][$i]["pickedChoice"]) {
                                 $flag = false;
@@ -806,12 +769,17 @@ class OrderController extends Controller
                         }
                     }
                 }
+
                 if ($flag) {
+
                     if ($request->action === 'add') {
+
                         $orderItem->quantity++;
                     } else if ($request->action === 'sub' && $orderItem->quantity > 1) {
+
                         $orderItem->quantity--;
                     } else if ($request->action === 'sub' && $orderItem->quantity <= 1) {
+
                         $index = array_search($orderItem, $orderObject);
                         array_splice($orderObject, $index, 1);
                     }
@@ -826,7 +794,10 @@ class OrderController extends Controller
                 $orderRow->order_list_string = json_encode($orderArr);
             }
         }
+        // $abcArr = json_decode($orderRow->order_list_string);
         $orderRow->save();
+        broadcast(new UpdateOrder($request->orderId, $request->orderItem, $request->userId, $request->action));
+        return response()->json(compact("orderRow"), 200);
     }
 
 }

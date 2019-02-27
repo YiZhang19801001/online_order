@@ -71589,25 +71589,23 @@ var ShoppingCart = function (_Component) {
         });
 
         Echo.channel("tableOrder").listen("UpdateOrder", function (e) {
+          console.log("listened");
+
           if (e.orderId == _this2.props.orderId && e.userId !== _this2.props.userId) {
-            if (e.action == "update") {
-              __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post("/table/public/api/initcart", {
-                order_id: _this2.props.orderId,
-                cdt: _this2.props.cdt,
-                v: _this2.props.v,
-                table_id: _this2.props.tableNumber,
-                lang: localStorage.getItem("aupos_language_code")
-              }).then(function (res) {
-                // this.setState({ shoppingCartList: res.data.pending_list });
-                _this2.props.updateOrderList(res.data.pendingList);
-                _this2.props.updateHistoryCartList(res.data.historyList);
-                // this.setState({ orderShoppingCartList: res.data.ordered_list });
-              }).catch(function (err) {
-                window.location.reload();
-              });
-            } else {
-              _this2.props.updateShoppingCartList(false, e.orderItem, "table", e.action, _this2.props.orderId, _this2.props.tableNumber);
-            }
+            __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post("/table/public/api/initcart", {
+              order_id: _this2.props.orderId,
+              cdt: _this2.props.cdt,
+              v: _this2.props.v,
+              table_id: _this2.props.tableNumber,
+              lang: localStorage.getItem("aupos_language_code")
+            }).then(function (res) {
+              console.log("update state");
+
+              _this2.props.updateOrderList(res.data.pendingList);
+              _this2.props.updateHistoryCartList(res.data.historyList);
+            }).catch(function (err) {
+              window.location.reload();
+            });
           }
         });
       }

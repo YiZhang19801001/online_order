@@ -72,34 +72,25 @@ export default class ShoppingCart extends Component {
         });
 
       Echo.channel("tableOrder").listen("UpdateOrder", e => {
+        console.log("listened");
+
         if (e.orderId == this.props.orderId && e.userId !== this.props.userId) {
-          if (e.action == "update") {
-            Axios.post(`/table/public/api/initcart`, {
-              order_id: this.props.orderId,
-              cdt: this.props.cdt,
-              v: this.props.v,
-              table_id: this.props.tableNumber,
-              lang: localStorage.getItem("aupos_language_code")
+          Axios.post(`/table/public/api/initcart`, {
+            order_id: this.props.orderId,
+            cdt: this.props.cdt,
+            v: this.props.v,
+            table_id: this.props.tableNumber,
+            lang: localStorage.getItem("aupos_language_code")
+          })
+            .then(res => {
+              console.log("update state");
+
+              this.props.updateOrderList(res.data.pendingList);
+              this.props.updateHistoryCartList(res.data.historyList);
             })
-              .then(res => {
-                // this.setState({ shoppingCartList: res.data.pending_list });
-                this.props.updateOrderList(res.data.pendingList);
-                this.props.updateHistoryCartList(res.data.historyList);
-                // this.setState({ orderShoppingCartList: res.data.ordered_list });
-              })
-              .catch(err => {
-                window.location.reload();
-              });
-          } else {
-            this.props.updateShoppingCartList(
-              false,
-              e.orderItem,
-              "table",
-              e.action,
-              this.props.orderId,
-              this.props.tableNumber
-            );
-          }
+            .catch(err => {
+              window.location.reload();
+            });
         }
       });
     }
