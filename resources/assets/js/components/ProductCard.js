@@ -62,13 +62,13 @@ export default class ProductCard extends Component {
         Qty += orderItem.quantity;
       }
     });
-    if (historyList) {
-      historyList.map(orderItem => {
-        if (orderItem.item.product_id === this.props.product.product_id) {
-          Qty += orderItem.quantity;
-        }
-      });
-    }
+    // if (historyList) {
+    //   historyList.map(orderItem => {
+    //     if (orderItem.item.product_id === this.props.product.product_id) {
+    //       Qty += orderItem.quantity;
+    //     }
+    //   });
+    // }
     this.setState({ quantity: Qty });
   }
 

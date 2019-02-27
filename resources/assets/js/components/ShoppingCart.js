@@ -116,11 +116,11 @@ export default class ShoppingCart extends Component {
         sum += orderItem.item.price * orderItem.quantity;
       });
     }
-    if (this.state.historyCartList.length > 0) {
-      this.state.historyCartList.forEach(orderItem => {
-        sum += orderItem.item.price * orderItem.quantity;
-      });
-    }
+    // if (this.state.historyCartList.length > 0) {
+    //   this.state.historyCartList.forEach(orderItem => {
+    //     sum += orderItem.item.price * orderItem.quantity;
+    //   });
+    // }
     return sum.toFixed(2);
   }
 
@@ -139,11 +139,11 @@ export default class ShoppingCart extends Component {
       });
     }
 
-    if (this.state.historyCartList.length > 0) {
-      this.state.historyCartList.forEach(orderItem => {
-        quantity += orderItem.quantity;
-      });
-    }
+    // if (this.state.historyCartList.length > 0) {
+    //   this.state.historyCartList.forEach(orderItem => {
+    //     quantity += orderItem.quantity;
+    //   });
+    // }
     return quantity;
   }
 
