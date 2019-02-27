@@ -760,7 +760,6 @@ class OrderController extends Controller
                     $flag = true;
 
                     if (count($orderItem->item->choices) > 0) {
-
                         for ($i = 0; $i < count($orderItem->item->choices); $i++) {
                             if ($orderItem->item->choices[$i]->pickedChoice != $new_item["choices"][$i]["pickedChoice"]) {
                                 $flag = false;
