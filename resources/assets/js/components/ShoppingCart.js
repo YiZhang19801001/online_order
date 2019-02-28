@@ -76,7 +76,7 @@ export default class ShoppingCart extends Component {
 
       Echo.channel("tableOrder").listen("UpdateOrder", e => {
         if (e.orderId == this.props.orderId && e.userId !== this.props.userId) {
-          _.debounce(this.reFetchOrderListFromServe, 1000)();
+          _.debounce(this.reFetchOrderListFromServe, 300)();
         }
       });
     }

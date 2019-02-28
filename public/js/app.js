@@ -71595,7 +71595,7 @@ var ShoppingCart = function (_Component) {
 
         Echo.channel("tableOrder").listen("UpdateOrder", function (e) {
           if (e.orderId == _this2.props.orderId && e.userId !== _this2.props.userId) {
-            __WEBPACK_IMPORTED_MODULE_3_lodash___default.a.debounce(_this2.reFetchOrderListFromServe, 1000)();
+            __WEBPACK_IMPORTED_MODULE_3_lodash___default.a.debounce(_this2.reFetchOrderListFromServe, 300)();
           }
         });
       }
