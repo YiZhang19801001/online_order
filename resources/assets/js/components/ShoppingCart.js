@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Axios from "axios";
+import _ from "lodash";
 
 import OrderItemCard from "./OrderItemCard";
 
@@ -23,6 +24,8 @@ export default class ShoppingCart extends Component {
     this.closeOrderList = this.closeOrderList.bind(this);
     this.toggleOrderList = this.toggleOrderList.bind(this);
     this.clearPreorderShoppingCart = this.clearPreorderShoppingCart.bind(this);
+    this.reFetchOrderListFromServe = this.reFetchOrderListFromServe.bind(this);
+    this.debounceRun = this.debounceRun.bind(this);
   }
 
   componentWillMount() {
@@ -72,28 +75,33 @@ export default class ShoppingCart extends Component {
         });
 
       Echo.channel("tableOrder").listen("UpdateOrder", e => {
-        console.log("listened");
-
         if (e.orderId == this.props.orderId && e.userId !== this.props.userId) {
-          Axios.post(`/table/public/api/initcart`, {
-            order_id: this.props.orderId,
-            cdt: this.props.cdt,
-            v: this.props.v,
-            table_id: this.props.tableNumber,
-            lang: localStorage.getItem("aupos_language_code")
-          })
-            .then(res => {
-              console.log("update state");
-
-              this.props.updateOrderList(res.data.pendingList);
-              this.props.updateHistoryCartList(res.data.historyList);
-            })
-            .catch(err => {
-              window.location.reload();
-            });
+          _.debounce(this.reFetchOrderListFromServe, 1000)();
         }
       });
     }
+  }
+
+  debounceRun() {}
+
+  reFetchOrderListFromServe() {
+    console.log("called");
+
+    Axios.post(`/table/public/api/initcart`, {
+      order_id: this.props.orderId,
+      cdt: this.props.cdt,
+      v: this.props.v,
+      table_id: this.props.tableNumber,
+      lang: localStorage.getItem("aupos_language_code")
+    })
+      .then(res => {
+        console.log("update state");
+        this.props.updateOrderList(res.data.pendingList);
+        this.props.updateHistoryCartList(res.data.historyList);
+      })
+      .catch(err => {
+        window.location.reload();
+      });
   }
 
   componentWillReceiveProps(newProps) {

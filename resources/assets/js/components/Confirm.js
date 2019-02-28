@@ -117,6 +117,7 @@ export default class Confirm extends Component {
         })
         .catch(err => {
           window.location.reload();
+          // console.log(err);
         });
     }
   }

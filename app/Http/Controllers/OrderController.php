@@ -470,16 +470,20 @@ class OrderController extends Controller
     {
         $order_id = $request->order_id;
 
-        $order = TempOrder::where('id', $order_id)->first();
+        \DB::beginTransaction();
 
+        $order = TempOrder::where('id', $order_id)->lockForUpdate()->first();
         $shortHistoryList = json_decode($order->order_list_string)->historyList;
         $shortPendingList = json_decode($order->order_list_string)->pendingList;
 
         if (count($shortPendingList) === 0) {
+            \DB::commit();
             return response()->json(["historyList" => $this->extendsList($shortHistoryList, $request->lang), "status" => "busy"], 200);
         }
 
         $orderList = $this->extendsList($shortPendingList, $request->lang);
+        //update temp_order_item
+        $returnHistoryList = $this->changeTempOrderItemsStatus($order_id, $orderList);
 
         /**request is an array of  */
         //get new order
@@ -499,9 +503,8 @@ class OrderController extends Controller
         //create record in oc_table_linksub
         $this->createOrderLinkSubHelper($new_order, $request->v);
 
-        //update temp_order_item
-        $returnHistoryList = $this->changeTempOrderItemsStatus($request->order_id, $orderList);
         broadcast(new UpdateOrder($request->order_id, null, $request->userId, 'update'));
+        \DB::commit();
 
         return response()->json(["historyList" => $this->extendsList($returnHistoryList, $request->lang), "status" => "commited"], 200);
 

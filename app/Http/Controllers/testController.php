@@ -113,9 +113,7 @@ class testController extends Controller
     {
         \DB::beginTransaction();
 
-        $model = \App\User::lockForUpdate()->find(1);
-        $model->code = $model->code . "aaa";
-        $model->save();
+        $model = \App\TempOrder::lockForUpdate()->find("2151");
 
         \DB::commit();
         return response()->json($model, 200);
