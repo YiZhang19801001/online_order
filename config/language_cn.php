@@ -2,7 +2,7 @@
 
 return [
 /** txt of language switch button */
-    'lang_switch_en' => 'EN',
+    'lang_switch' => 'EN',
     'lang_switch_cn' => '中',
     /** display before the price number to indicate what currency is used in this store */
     'currency' => '澳币',
@@ -33,7 +33,7 @@ return [
 // orderedLabel - show on shopping list for the items already confirmed
     'order_label' => '已下单',
 // pre-order mode on display title
-    'preorder_title' => 'pre-order',
+    'preorder_title' => '预点单',
 // pre-order confirm page title text
     'preorder_confirm_text' => '恭喜您已下单成功',
 // subtitle tips under qr code
@@ -50,5 +50,6 @@ return [
     'clear_localStorage' => '清空购物车',
     //
     'setting_theme' => '主题',
-
+	//
+	'cancel'=>"取消",
 ];

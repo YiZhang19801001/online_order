@@ -3,7 +3,7 @@
 return [
 /** txt of language switch button */
     'lang_switch_en' => 'EN',
-    'lang_switch_cn' => '中',
+    'lang_switch' => '中',
     /** display before the price number to indicate what currency is used in this store */
     'currency' => 'AUD',
 //  display in choice form title should let user understand the function of choice form
@@ -33,7 +33,7 @@ return [
 // orderedLabel - show on shopping list for the items already confirmed
     'order_label' => 'ordered',
 // preorder mode title
-    'preorder_title' => '预点单',
+    'preorder_title' => 'pre-order',
 // preorder confirm page header text
     'preorder_confirm_text' => 'your order saved',
 // subtitle tips under qr code
@@ -50,4 +50,6 @@ return [
     'clear_localStorage' => 'clear cart',
     //
     'setting_theme' => 'Theme',
+	//
+	'cancel'=>"cancel",
 ];

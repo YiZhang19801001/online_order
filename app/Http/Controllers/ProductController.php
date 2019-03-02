@@ -68,7 +68,10 @@ class ProductController extends Controller
 
             foreach ($p_ids as $id) {
                 /** select the target product in DB then map the need value to new_product */
-
+                $p = Product::find($id->product_id);
+                if ($p->status === 0) {
+                    continue;
+                }
                 //select target product in DB
                 $target_product = ProductDescription::where('product_id', $id->product_id)->where('language_id', $lang)->first();
                 if ($target_product === null) {
@@ -76,7 +79,7 @@ class ProductController extends Controller
                 }
                 /** create price value*/
                 //fetch price first
-                $p = Product::where('product_id', $id->product_id)->first();
+
                 $price = $p["price"];
                 //cut after 2 digts decimal point, i.e 1.0000000 -> 1.00
                 $posOfdecimal = strpos($price, ".");
