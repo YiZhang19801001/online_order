@@ -18,6 +18,9 @@ return [
     'countLanguage' => 2,
     // clock list
     'block_list' => [],
+    // Qrcode expired duration
+    'duration_hours' => env('DURATION_HOURS', 12),
+    'duration_mins' => env('DURATION_MINS', 00),
 
 /** End */
 

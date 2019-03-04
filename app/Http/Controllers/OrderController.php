@@ -94,7 +94,7 @@ class OrderController extends Controller
         /**validate users */
         //check if this QRcode contain all infos with correct format
         if ($request->cdt == null || $request->v == null) {
-            return response()->json(["message" => "this QR Code is invalid, please contact staff!"], 400);
+            return response()->json(["message" => "this QR Code is invalid, please contact our staff!"], 400);
         }
 
         //mapping value for further valided
@@ -107,35 +107,50 @@ class OrderController extends Controller
         $tz = 'Australia/Sydney';
 
         //reformat income time
+        $duration_hours = config("app.duration_hours");
+        $duration_mins = config("app.duration_mins");
         $time = strtotime($cdt);
-        $day = date('y-m-d', $time);
+        $day = date('y-m-d H:i:s', $time);
+        $expired_dt = date('y-m-d H:i:s', strtotime("+$duration_hours hours $duration_mins minutes", $time));
 
+        return response()->json(compact("day", "expired_dt"));
         //reformat today's date
         $today = new DateTime("now", new DateTimeZone($tz));
-        $time_today = $today->format('y-m-d');
 
+        $time_today = $today->format('y-m-d H:i:s');
         //return array('cdt' => $day, 'db' => $day_in_db, 'today' => $time_today);
         //check matched or not
-        if ($day < $time_today) {
+        if ($expired_dt < $time_today) {
             return response()->json(["message" => "this QR Code is expired, please contact staff!"], 400);
-
-        } else if ($day == $time_today) {
-            if ($new_table_link === null || $new_table_link->status != 0) {
-
-                return response()->json(["message" => "this QR Code is not found, please try it later or contact staff!"], 400);
-            } else if ($new_table_link !== null && $new_table_link->status == 0) {
-                //reformat time in DB
-                $time_in_db = strtotime($new_table_link->link_generate_time);
-                $day_in_db = date('y-m-d', $time_in_db);
-                if ($day_in_db != $day) {
-                    return response()->json(["message" => "this QR Code is invalid, please contact staff!"], 400);
-
-                }
-            }
-        } else {
-            return response()->json(["message" => "this QR Code is invalid, please contact staff!"], 400);
-
         }
+
+        if ($time_today < $day) {
+            return response()->json(["message" => "this QR Code is not validate, please contact staff!"], 400);
+        }
+
+        if ($new_table_link === null || $new_table_link->status != 0) {
+            return response()->json(["message" => "this QR Code is not found, please try it later or contact staff!"], 400);
+        }
+
+        // if ($expired_dt < $time_today) {
+        //     return response()->json(["message" => "this QR Code is expired, please contact staff!"], 400);
+
+        // } else if ($day == $time_today) {
+        //     if ($new_table_link === null || $new_table_link->status != 0) {
+
+        //         return response()->json(["message" => "this QR Code is not found, please try it later or contact staff!"], 400);
+        //     } else if ($new_table_link !== null && $new_table_link->status == 0) {
+        //         //reformat time in DB
+        //         $time_in_db = strtotime($new_table_link->link_generate_time);
+        //         $day_in_db = date('y-m-d', $time_in_db);
+        //         if ($day_in_db != $day) {
+        //             return response()->json(["message" => "this QR Code is invalid, please contact staff!"], 400);
+        //         }
+        //     }
+        // } else {
+        //     return response()->json(["message" => "this QR Code is invalid, please contact staff!"], 400);
+
+        // }
         /**end validation */
 
         $list = $this->fetchOrderListHelper($request->order_id, $request->table_id, $request->lang);

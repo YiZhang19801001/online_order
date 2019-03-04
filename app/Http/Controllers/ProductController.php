@@ -69,7 +69,8 @@ class ProductController extends Controller
             foreach ($p_ids as $id) {
                 /** select the target product in DB then map the need value to new_product */
                 $p = Product::find($id->product_id);
-                if ($p->status === 0) {
+
+                if (!$p || $p->status === 0) {
                     continue;
                 }
                 //select target product in DB
