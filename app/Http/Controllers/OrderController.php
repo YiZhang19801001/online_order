@@ -113,7 +113,7 @@ class OrderController extends Controller
         $day = date('y-m-d H:i:s', $time);
         $expired_dt = date('y-m-d H:i:s', strtotime("+$duration_hours hours $duration_mins minutes", $time));
 
-        return response()->json(compact("day", "expired_dt"));
+        // return response()->json(compact("day", "expired_dt"));
         //reformat today's date
         $today = new DateTime("now", new DateTimeZone($tz));
 
