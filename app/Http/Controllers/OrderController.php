@@ -107,8 +107,8 @@ class OrderController extends Controller
         $tz = 'Australia/Sydney';
 
         //reformat income time
-        $duration_hours = config("app.duration_hours");
-        $duration_mins = config("app.duration_mins");
+        $duration_hours = intval(config("app.duration_hours"));
+        $duration_mins = intval(config("app.duration_mins"));
         $time = strtotime($cdt);
         $day = date('y-m-d H:i:s', $time);
         $expired_dt = date('y-m-d H:i:s', strtotime("+$duration_hours hours $duration_mins minutes", $time));
