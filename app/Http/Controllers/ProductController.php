@@ -70,7 +70,7 @@ class ProductController extends Controller
                 /** select the target product in DB then map the need value to new_product */
                 $p = Product::find($id->product_id);
 
-                if (!$p || $p->status === 0) {
+                if (!$p) {
                     continue;
                 }
                 //select target product in DB
@@ -97,6 +97,7 @@ class ProductController extends Controller
                 $new_product["price"] = $price;
                 $new_product["upc"] = $upc;
                 $new_product["description"] = $target_product->description;
+                $new_product["status"] = $p->status;
 
                 $image_path = '/table/public/images/items/' . $p["image"];
                 $new_product["image"] = "";

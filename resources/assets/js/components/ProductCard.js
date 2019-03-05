@@ -23,6 +23,7 @@ export default class ProductCard extends Component {
     this.closeChoiceForm = this.closeChoiceForm.bind(this);
     this.getProductQtyInOrderList = this.getProductQtyInOrderList.bind(this);
     this.changePicSize = this.changePicSize.bind(this);
+    this.renderSoldOutTag = this.renderSoldOutTag.bind(this);
   }
 
   componentDidMount() {
@@ -62,14 +63,14 @@ export default class ProductCard extends Component {
         Qty += orderItem.quantity;
       }
     });
-    // if (historyList) {
-    //   historyList.map(orderItem => {
-    //     if (orderItem.item.product_id === this.props.product.product_id) {
-    //       Qty += orderItem.quantity;
-    //     }
-    //   });
-    // }
     this.setState({ quantity: Qty });
+  }
+
+  renderSoldOutTag() {
+    if (parseInt(this.props.product.status) === 1) {
+      return null;
+    }
+    return <div className="sold-out-tag">Sold Out</div>;
   }
 
   makeChoice() {
@@ -159,7 +160,11 @@ export default class ProductCard extends Component {
           <div className="product-name">{this.props.product.name}</div>
           <div className="price-quantity">
             <div className="price">${this.props.product.price}</div>
-            {this.props.mode !== "menu" ? Control_Pannel : null}
+            {this.props.mode !== "menu" &&
+            parseInt(this.props.product.status) === 1
+              ? Control_Pannel
+              : null}
+            {this.renderSoldOutTag()}
           </div>
         </div>
         {this.state.toggleChoiceForm ? (

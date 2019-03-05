@@ -70898,6 +70898,7 @@ var ProductCard = function (_Component) {
     _this.closeChoiceForm = _this.closeChoiceForm.bind(_this);
     _this.getProductQtyInOrderList = _this.getProductQtyInOrderList.bind(_this);
     _this.changePicSize = _this.changePicSize.bind(_this);
+    _this.renderSoldOutTag = _this.renderSoldOutTag.bind(_this);
     return _this;
   }
 
@@ -70934,14 +70935,19 @@ var ProductCard = function (_Component) {
           Qty += orderItem.quantity;
         }
       });
-      // if (historyList) {
-      //   historyList.map(orderItem => {
-      //     if (orderItem.item.product_id === this.props.product.product_id) {
-      //       Qty += orderItem.quantity;
-      //     }
-      //   });
-      // }
       this.setState({ quantity: Qty });
+    }
+  }, {
+    key: "renderSoldOutTag",
+    value: function renderSoldOutTag() {
+      if (parseInt(this.props.product.status) === 1) {
+        return null;
+      }
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        "div",
+        { className: "sold-out-tag" },
+        "Sold Out"
+      );
     }
   }, {
     key: "makeChoice",
@@ -71047,7 +71053,8 @@ var ProductCard = function (_Component) {
               "$",
               this.props.product.price
             ),
-            this.props.mode !== "menu" ? Control_Pannel : null
+            this.props.mode !== "menu" && parseInt(this.props.product.status) === 1 ? Control_Pannel : null,
+            this.renderSoldOutTag()
           )
         ),
         this.state.toggleChoiceForm ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__ChoiceForm__["a" /* default */], {
