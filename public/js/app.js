@@ -70946,7 +70946,7 @@ var ProductCard = function (_Component) {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         "div",
         { className: "sold-out-tag" },
-        "Sold Out"
+        this.props.app_conf.sold_out
       );
     }
   }, {

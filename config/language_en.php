@@ -50,6 +50,8 @@ return [
     'clear_localStorage' => 'clear cart',
     //
     'setting_theme' => 'Theme',
-	//
-	'cancel'=>"cancel",
+    //
+    'cancel' => "cancel",
+    // sold out tag
+    'sold_out' => 'Sold Out',
 ];

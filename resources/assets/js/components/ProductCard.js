@@ -70,7 +70,7 @@ export default class ProductCard extends Component {
     if (parseInt(this.props.product.status) === 1) {
       return null;
     }
-    return <div className="sold-out-tag">Sold Out</div>;
+    return <div className="sold-out-tag">{this.props.app_conf.sold_out}</div>;
   }
 
   makeChoice() {

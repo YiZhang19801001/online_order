@@ -50,6 +50,8 @@ return [
     'clear_localStorage' => '清空购物车',
     //
     'setting_theme' => '主题',
-	//
-	'cancel'=>"取消",
+    //
+    'cancel' => "取消",
+    // sold out tag
+    'sold_out' => '今日售罄',
 ];
