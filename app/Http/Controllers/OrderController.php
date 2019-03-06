@@ -132,25 +132,6 @@ class OrderController extends Controller
             return response()->json(["message" => "this QR Code is not found, please try it later or contact staff!"], 400);
         }
 
-        // if ($expired_dt < $time_today) {
-        //     return response()->json(["message" => "this QR Code is expired, please contact staff!"], 400);
-
-        // } else if ($day == $time_today) {
-        //     if ($new_table_link === null || $new_table_link->status != 0) {
-
-        //         return response()->json(["message" => "this QR Code is not found, please try it later or contact staff!"], 400);
-        //     } else if ($new_table_link !== null && $new_table_link->status == 0) {
-        //         //reformat time in DB
-        //         $time_in_db = strtotime($new_table_link->link_generate_time);
-        //         $day_in_db = date('y-m-d', $time_in_db);
-        //         if ($day_in_db != $day) {
-        //             return response()->json(["message" => "this QR Code is invalid, please contact staff!"], 400);
-        //         }
-        //     }
-        // } else {
-        //     return response()->json(["message" => "this QR Code is invalid, please contact staff!"], 400);
-
-        // }
         /**end validation */
 
         $list = $this->fetchOrderListHelper($request->order_id, $request->table_id, $request->lang);
@@ -493,7 +474,7 @@ class OrderController extends Controller
 
         if (count($shortPendingList) === 0) {
             \DB::commit();
-            return response()->json(["historyList" => $this->extendsList($shortHistoryList, $request->lang), "status" => "busy"], 200);
+            return response()->json(["historyList" => $this->extendsList($shortHistoryList, $request->lang), "status" => "pending list is empty"], 200);
         }
 
         $orderList = $this->extendsList($shortPendingList, $request->lang);

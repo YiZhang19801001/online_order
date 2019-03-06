@@ -23,6 +23,7 @@ import Menu from "./components/Menu";
 import Complete from "./components/Complete";
 import MySql from "./components/MySql";
 import Setting from "./components/Setting";
+import MyTest from "./components/MyTest";
 
 export default class App extends Component {
   constructor(props) {
@@ -306,7 +307,6 @@ export default class App extends Component {
                 userId={this.state.userId}
                 lang={this.state.lang}
                 v={this.state.v}
-                userId={this.state.userId}
                 orderId={this.state.orderId}
                 cdt={this.state.cdt}
                 tableNumber={this.state.tableId}
@@ -326,6 +326,21 @@ export default class App extends Component {
               <Setting app_conf={this.state.app_conf} {...props} />
             )}
           />
+          <Route
+            exact
+            patch="/table/public/mytest"
+            render={props => (
+              <MyTest
+                app_conf={this.state.app_conf}
+                userId={this.state.userId}
+                lang={this.state.lang}
+                shoppingCartList={this.state.shoppingCartList}
+                updateShoppingCartList={this.updateShoppingCartList}
+                {...props}
+              />
+            )}
+          />
+
           <Route
             exact
             path="/table/public/menu/:message"
