@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\ConfirmOrder;
+use App\Http\Controllers\Helper\OrderControllerHelper;
 use App\Events\UpdateOrder;
 use App\Order;
 use App\OrderExt;
@@ -25,8 +26,10 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+    public $helper;
     public function __construct()
     {
+        $this->helper = new OrderControllerHelper();
     }
 
     public function post(Request $request)
@@ -465,21 +468,37 @@ class OrderController extends Controller
     public function confirmOrder(Request $request)
     {
         $order_id = $request->order_id;
-
+        $language_id = isset($request->lang)?$request->lang:2;
         \DB::beginTransaction();
 
         $order = TempOrder::where('id', $order_id)->lockForUpdate()->first();
         $shortHistoryList = json_decode($order->order_list_string)->historyList;
         $shortPendingList = json_decode($order->order_list_string)->pendingList;
-
+        
         if (count($shortPendingList) === 0) {
             \DB::commit();
             return response()->json(["historyList" => $this->extendsList($shortHistoryList, $request->lang), "status" => "pending list is empty"], 200);
         }
-
+        // check order list, whether contain orderItem is inactive.
+        $check_product_status_result = $this->helper->checkOrderListProductStatus($shortPendingList,$language_id);
+        if(!$check_product_status_result->result){
+            $new_order_list_string = json_encode([
+                "historyList" =>$shortHistoryList,
+                "pendingList" =>$check_product_status_result->shortPendingList
+            ]);
+            $order->order_list_string = $new_order_list_string;
+            $order->save();
+            \DB::commit();
+            $message = $check_product_status_result->message;
+            $status = "reject";
+            return response()->json(compact("message","status"),200);
+        }
         $orderList = $this->extendsList($shortPendingList, $request->lang);
+
+
         //update temp_order_item
         $returnHistoryList = $this->changeTempOrderItemsStatus($order_id, $orderList);
+
 
         /**request is an array of  */
         //get new order
@@ -499,7 +518,11 @@ class OrderController extends Controller
         //create record in oc_table_linksub
         $this->createOrderLinkSubHelper($new_order, $request->v);
 
+
+
         broadcast(new UpdateOrder($request->order_id, null, $request->userId, 'update'));
+
+
         \DB::commit();
 
         return response()->json(["historyList" => $this->extendsList($returnHistoryList, $request->lang), "status" => "commited"], 200);
@@ -737,6 +760,16 @@ class OrderController extends Controller
         $mode = config('app.show_options');
         $new_item = $this->dryOrderItem($request->orderItem);
         $orderRow = TempOrder::where('id', $request->orderId)->first();
+
+        // check product is active or not
+        $check_product = Product::find($new_item["product_id"]);
+        $check_product_description = ProductDescription::where("product_id",$new_item["product_id"])->first();
+        $check_product_name = $check_product_description->name;
+        if($check_product===null || $check_product->status != 1){
+            $message = "sorry, $check_product_name is sold out.";
+            return response()->json(compact("message"),400);
+        }
+
 
         // if $order_list_string is null or empty add straight away
         if ($orderRow === null) {

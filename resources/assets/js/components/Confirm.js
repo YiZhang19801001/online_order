@@ -108,16 +108,22 @@ export default class Confirm extends Component {
         userId: this.props.userId
       })
         .then(res => {
-          this.props.updateHistoryCartList(res.data.historyList);
-          this.props.history.push(
-            `/table/public/complete/${this.props.match.params.tableId}/${
-              this.props.match.params.orderId
-            }`
-          );
+          if (res.data.status !== "reject") {
+            this.props.updateHistoryCartList(res.data.historyList);
+            this.props.history.push(
+              `/table/public/complete/${this.props.match.params.tableId}/${
+                this.props.match.params.orderId
+              }`
+            );
+          } else {
+            this.props.history.push(this.props.originPath);
+            alert(res.data.message);
+            window.location.reload();
+          }
         })
         .catch(err => {
-          window.location.reload();
-          // console.log(err);
+          // window.location.reload();
+          console.log(err.response);
         });
     }
   }

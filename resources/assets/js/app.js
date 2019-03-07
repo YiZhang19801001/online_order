@@ -211,6 +211,10 @@ export default class App extends Component {
         userId: this.state.userId,
         orderId: orderId,
         tableId: tableId
+      }).catch(err => {
+        alert(err.response.data.message);
+
+        window.location.reload();
       });
     }
   }
@@ -326,7 +330,7 @@ export default class App extends Component {
               <Setting app_conf={this.state.app_conf} {...props} />
             )}
           />
-          <Route
+          {/* <Route
             exact
             patch="/table/public/mytest"
             render={props => (
@@ -339,7 +343,7 @@ export default class App extends Component {
                 {...props}
               />
             )}
-          />
+          /> */}
 
           <Route
             exact
