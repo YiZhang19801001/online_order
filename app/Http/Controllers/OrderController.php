@@ -470,47 +470,47 @@ class OrderController extends Controller
         $order_id = $request->order_id;
         $language_id = isset($request->lang)?$request->lang:2;
         /**validate users */
-//check if this QRcode contain all infos with correct format
-if ($request->cdt == null || $request->v == null) {
-    return response()->json(["message" => "this QR Code is invalid, please contact our staff!"], 400);
-}
+        //check if this QRcode contain all infos with correct format
+        if ($request->cdt == null || $request->v == null) {
+            return response()->json(["message" => "this QR Code is invalid, please contact our staff!"], 400);
+        }
 
-//mapping value for further valided
-$cdt = $request->cdt;
-$v = $request->v;
+        //mapping value for further valided
+        $cdt = $request->cdt;
+        $v = $request->v;
 
-//check if this QRcode valid in DB
-$new_table_link = TableLink::where('validation', $v)->first();
+        //check if this QRcode valid in DB
+        $new_table_link = TableLink::where('validation', $v)->first();
 
-$tz = 'Australia/Sydney';
+        $tz = 'Australia/Sydney';
 
-//reformat income time
-$duration_hours = intval(config("app.duration_hours"));
-$duration_mins = intval(config("app.duration_mins"));
-$time = strtotime($cdt);
-$day = date('y-m-d H:i:s', $time);
-$expired_dt = date('y-m-d H:i:s', strtotime("+$duration_hours hours $duration_mins minutes", $time));
+        //reformat income time
+        $duration_hours = intval(config("app.duration_hours"));
+        $duration_mins = intval(config("app.duration_mins"));
+        $time = strtotime($cdt);
+        $day = date('y-m-d H:i:s', $time);
+        $expired_dt = date('y-m-d H:i:s', strtotime("+$duration_hours hours $duration_mins minutes", $time));
 
-// return response()->json(compact("day", "expired_dt"));
-//reformat today's date
-$today = new DateTime("now", new DateTimeZone($tz));
+        // return response()->json(compact("day", "expired_dt"));
+        //reformat today's date
+        $today = new DateTime("now", new DateTimeZone($tz));
 
-$time_today = $today->format('y-m-d H:i:s');
-//return array('cdt' => $day, 'db' => $day_in_db, 'today' => $time_today);
-//check matched or not
-if ($expired_dt < $time_today) {
-    return response()->json(["message" => "this QR Code is expired, please contact staff!"], 400);
-}
+        $time_today = $today->format('y-m-d H:i:s');
+        //return array('cdt' => $day, 'db' => $day_in_db, 'today' => $time_today);
+        //check matched or not
+        if ($expired_dt < $time_today) {
+            return response()->json(["message" => "this QR Code is expired, please contact staff!"], 400);
+        }
 
-if ($time_today < $day) {
-    return response()->json(["message" => "this QR Code is not validate, please contact staff!"], 400);
-}
+        if ($time_today < $day) {
+            return response()->json(["message" => "this QR Code is not validate, please contact staff!"], 400);
+        }
 
-if ($new_table_link === null || $new_table_link->status != 0) {
-    return response()->json(["message" => "this QR Code is not found, please try it later or contact staff!"], 400);
-}
+        if ($new_table_link === null || $new_table_link->status != 0) {
+            return response()->json(["message" => "this QR Code is not found, please try it later or contact staff!"], 400);
+        }
 
-/**end validation */
+        /**end validation */
 
         \DB::beginTransaction();
 
@@ -582,8 +582,13 @@ if ($new_table_link === null || $new_table_link->status != 0) {
         foreach ($orderList as $orderItem) {
             array_push($dryOrderList, json_decode(json_encode(['item' => $this->dryOrderItem($orderItem->item), 'quantity' => $orderItem->quantity])));
         }
-        // $orderArr->historyList = array_merge($orderHistoryListArr, $dryOrderList);
-        $orderArr->historyList = $dryOrderList;
+        $mode = config("app.show_full_order_history");
+        if($mode){
+            $orderArr->historyList = array_merge($orderHistoryListArr, $dryOrderList);
+        }
+        else{
+            $orderArr->historyList = $dryOrderList;
+        }
         $orderArr->pendingList = [];
         $order->order_list_string = json_encode($orderArr);
         $order->save();

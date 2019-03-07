@@ -86,7 +86,30 @@ export default class App extends Component {
   }
 
   updateHistoryCartList(list) {
-    this.setState({ historyCartList: list });
+    let newHistoryList = [];
+    // let counter_true = 0;
+    // let counter_false = 0;
+    list.map(ele => {
+      let flag = false;
+      newHistoryList = newHistoryList.map(item => {
+        if (_.isEqual(item.item, ele.item)) {
+          flag = true;
+          // counter_true++;
+          // console.log(ele);
+
+          return { ...item, quantity: item.quantity + ele.quantity };
+        } else {
+          // counter_false++;
+
+          return item;
+        }
+      });
+      if (!flag) {
+        newHistoryList = [...newHistoryList, ele];
+      }
+    });
+    this.setState({ historyCartList: newHistoryList });
+    // console.log({ newHistoryList, counter_false, counter_true });
   }
   setOriginPath(path) {
     this.setState({ originPath: path });
