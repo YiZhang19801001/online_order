@@ -35,7 +35,7 @@ class OrderControllerHelper
             $sold_out_items = substr($sold_out_items, 0, -2);
         }
 
-        $message = "Sorry, $sold_out_items are sold out, we have adjusted your order, please check and sumbit again.";
+        $message = " $sold_out_items";
         return json_decode(json_encode([
             "result" => $result,
             "message" => $message,

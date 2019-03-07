@@ -31484,6 +31484,19 @@ var App = function (_Component) {
           }),
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router_dom__["c" /* Route */], {
             exact: true,
+            patch: "/table/public/mytest",
+            render: function render(props) {
+              return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_10__components_MyTest__["a" /* default */], _extends({
+                app_conf: _this3.state.app_conf,
+                userId: _this3.state.userId,
+                lang: _this3.state.lang,
+                shoppingCartList: _this3.state.shoppingCartList,
+                updateShoppingCartList: _this3.updateShoppingCartList
+              }, props));
+            }
+          }),
+          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router_dom__["c" /* Route */], {
+            exact: true,
             path: "/table/public/menu/:message",
             render: function render(props) {
               return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6__components_Menu__["a" /* default */], _extends({ app_conf: _this3.state.app_conf }, props));
@@ -72008,8 +72021,12 @@ var Confirm = function (_Component) {
             _this2.props.updateHistoryCartList(res.data.historyList);
             _this2.props.history.push("/table/public/complete/" + _this2.props.match.params.tableId + "/" + _this2.props.match.params.orderId);
           } else {
+            var alertText = _this2.props.app_conf.sorry + ", " + res.data.message + " " + _this2.props.app_conf.soldout_notify_when_confirm;
+            console.log(alertText);
+            window.alert(alertText);
+
             _this2.props.history.push(_this2.props.originPath);
-            alert(res.data.message);
+
             window.location.reload();
           }
         }).catch(function (err) {
@@ -74134,15 +74151,16 @@ var MyTest = function (_React$Component) {
   }, {
     key: "startTest",
     value: function startTest() {
-      var _this2 = this;
-
       this.setState({ test_status: 1 });
-      for (var index = 0; index < this.state.numberOfTry; index++) {}
+      for (var index = 0; index < this.state.numberOfTry; index++) {
+        setTimeout(this.addOrderItem, this.state.timeOut);
+        setTimeout(this.confirmOrder, this.state.timeOut);
+      }
 
-      var response = this.testRun();
-      response.then(function (res) {
-        _this2.confirmOrder();
-      });
+      // const response = this.testRun();
+      // response.then(res => {
+      //   this.confirmOrder();
+      // });
     }
   }, {
     key: "testRun",
@@ -74172,7 +74190,7 @@ var MyTest = function (_React$Component) {
     key: "addOrderItem",
     value: function addOrderItem() {
       var sampleProduct = {
-        product_id: 4,
+        product_id: 20,
         name: "泰汁蒸盲曹",
         price: "24.90",
         upc: "1104",
@@ -74187,7 +74205,7 @@ var MyTest = function (_React$Component) {
   }, {
     key: "confirmOrder",
     value: function confirmOrder() {
-      var _this3 = this;
+      var _this2 = this;
 
       __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post("/table/public/api/confirm", {
         orderList: this.state.shoppingCartList,
@@ -74201,14 +74219,14 @@ var MyTest = function (_React$Component) {
         lang: this.props.lang,
         userId: this.props.userId
       }).then(function (res) {
-        _this3.setState({
-          responseMsg: [].concat(_toConsumableArray(_this3.state.responseMsg), [res.data]),
+        _this2.setState({
+          responseMsg: [].concat(_toConsumableArray(_this2.state.responseMsg), [res.data]),
           shoppingCartList: []
         });
         // this.props.updateHistoryCartList(res.data.historyList);
       }).catch(function (err) {
-        _this3.setState({
-          responseMsg: [].concat(_toConsumableArray(_this3.state.responseMsg), [err.response])
+        _this2.setState({
+          responseMsg: [].concat(_toConsumableArray(_this2.state.responseMsg), [err.response])
         });
       });
     }
@@ -74226,7 +74244,7 @@ var MyTest = function (_React$Component) {
   }, {
     key: "renderLoading",
     value: function renderLoading() {
-      var _this4 = this;
+      var _this3 = this;
 
       if (this.state.test_status === 0) {
         return null;
@@ -74260,7 +74278,7 @@ var MyTest = function (_React$Component) {
           "div",
           {
             onClick: function onClick() {
-              _this4.setState({ test_status: 0, responseMsg: [] });
+              _this3.setState({ test_status: 0, responseMsg: [] });
             },
             className: "btn-reset-test"
           },
@@ -74426,7 +74444,7 @@ var MyTest = function (_React$Component) {
   return MyTest;
 }(__WEBPACK_IMPORTED_MODULE_1_react___default.a.Component);
 
-/* unused harmony default export */ var _unused_webpack_default_export = (MyTest);
+/* harmony default export */ __webpack_exports__["a"] = (MyTest);
 
 /***/ }),
 /* 308 */

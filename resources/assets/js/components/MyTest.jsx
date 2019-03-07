@@ -35,12 +35,15 @@ class MyTest extends React.Component {
   }
   startTest() {
     this.setState({ test_status: 1 });
-    for (let index = 0; index < this.state.numberOfTry; index++) {}
+    for (let index = 0; index < this.state.numberOfTry; index++) {
+      setTimeout(this.addOrderItem, this.state.timeOut);
+      setTimeout(this.confirmOrder, this.state.timeOut);
+    }
 
-    const response = this.testRun();
-    response.then(res => {
-      this.confirmOrder();
-    });
+    // const response = this.testRun();
+    // response.then(res => {
+    //   this.confirmOrder();
+    // });
   }
 
   async testRun() {
@@ -48,7 +51,7 @@ class MyTest extends React.Component {
   }
   addOrderItem() {
     const sampleProduct = {
-      product_id: 4,
+      product_id: 20,
       name: "泰汁蒸盲曹",
       price: "24.90",
       upc: "1104",

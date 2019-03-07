@@ -116,8 +116,14 @@ export default class Confirm extends Component {
               }`
             );
           } else {
+            const alertText = `${this.props.app_conf.sorry}, ${
+              res.data.message
+            } ${this.props.app_conf.soldout_notify_when_confirm}`;
+            console.log(alertText);
+            window.alert(alertText);
+
             this.props.history.push(this.props.originPath);
-            alert(res.data.message);
+
             window.location.reload();
           }
         })

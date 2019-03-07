@@ -54,4 +54,8 @@ return [
     'cancel' => "cancel",
     // sold out tag
     'sold_out' => 'Sold Out',
+    // sorry
+    'sorry' => 'sorry',
+    // sold out notify
+    'soldout_notify_when_confirm' => 'are sold out, we have adjusted your order, please check and sumbit again.',
 ];
