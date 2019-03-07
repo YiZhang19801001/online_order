@@ -801,16 +801,23 @@ if ($new_table_link === null || $new_table_link->status != 0) {
     public function update(Request $request)
     {
         $mode = config('app.show_options');
-        $new_item = $this->dryOrderItem($request->orderItem);
+        $new_item = $request->orderItem;
+        if($request->action !== "remove"){
+
+            $new_item = $this->dryOrderItem($request->orderItem);
+        }
         $orderRow = TempOrder::where('id', $request->orderId)->first();
 
         // check product is active or not
-        $check_product = Product::find($new_item["product_id"]);
-        $check_product_description = ProductDescription::where("product_id",$new_item["product_id"])->first();
-        $check_product_name = $check_product_description->name;
-        if($check_product===null || $check_product->status != 1){
-            $message = "sorry, $check_product_name is sold out.";
-            return response()->json(compact("message"),400);
+        if($request->action ==="add"){
+
+            $check_product = Product::find($new_item["product_id"]);
+            $check_product_description = ProductDescription::where("product_id",$new_item["product_id"])->first();
+            $check_product_name = $check_product_description->name;
+            if($check_product===null || $check_product->status != 1){
+                $message = "sorry, $check_product_name is sold out.";
+                return response()->json(compact("message"),400);
+            }
         }
 
 
@@ -834,14 +841,14 @@ if ($new_table_link === null || $new_table_link->status != 0) {
                 if ($orderItem->item->product_id === $new_item["product_id"]) {
                     $flag = true;
 
-                    if (count($orderItem->item->choices) > 0) {
-                        for ($i = 0; $i < count($orderItem->item->choices); $i++) {
-                            if ($orderItem->item->choices[$i]->pickedChoice != $new_item["choices"][$i]["pickedChoice"]) {
-                                $flag = false;
-                                break;
-                            }
-                        }
-                    }
+                    // if (count($orderItem->item->choices) > 0 && $request->action !="remove") {
+                    //     for ($i = 0; $i < count($orderItem->item->choices); $i++) {
+                    //         if ($orderItem->item->choices[$i]->pickedChoice != $new_item["choices"][$i]["pickedChoice"]) {
+                    //             $flag = false;
+                    //             break;
+                    //         }
+                    //     }
+                    // }
                 }
 
                 if ($flag) {
@@ -852,7 +859,7 @@ if ($new_table_link === null || $new_table_link->status != 0) {
                     } else if ($request->action === 'sub' && $orderItem->quantity > 1) {
 
                         $orderItem->quantity--;
-                    } else if ($request->action === 'sub' && $orderItem->quantity <= 1) {
+                    } else if ($request->action === 'sub' && $orderItem->quantity <= 1 || $request->action === "remove") {
 
                         $index = array_search($orderItem, $orderObject);
                         array_splice($orderObject, $index, 1);

@@ -24,6 +24,8 @@ export default class ProductCard extends Component {
     this.getProductQtyInOrderList = this.getProductQtyInOrderList.bind(this);
     this.changePicSize = this.changePicSize.bind(this);
     this.renderSoldOutTag = this.renderSoldOutTag.bind(this);
+    this.renderControlPannel = this.renderControlPannel.bind(this);
+    this.removerItem = this.removerItem.bind(this);
   }
 
   componentDidMount() {
@@ -106,18 +108,52 @@ export default class ProductCard extends Component {
       this.props.tableNumber
     );
   }
-  render() {
+
+  removerItem() {
+    this.props.updateShoppingCartList(
+      true,
+      this.props.product,
+      this.props.mode,
+      "remove",
+      this.props.orderId,
+      this.props.tableNumber
+    );
+  }
+
+  renderControlPannel() {
     const isSimpleProduct =
-      this.props.product.options.length == 0 &&
-      this.props.product.choices.length == 0
+      this.props.product.options.length === 0 &&
+      this.props.product.choices.length === 0
         ? true
         : false;
-
-    const Control_Pannel =
-      this.state.quantity > 0 ? (
+    // product not being ordered yet, only add button appear
+    if (this.state.quantity <= 0) {
+      return (
+        <div className="control-pannel">
+          <div className="btn-plus-only">
+            <ButtonIncrease
+              onClick={isSimpleProduct ? this.increase : this.makeChoice}
+              mode="fill"
+            />
+          </div>
+        </div>
+      );
+    }
+    // product is ordered, show 1. decrease button 2. quantity 3. increase button
+    if (
+      (this.state.quantity > 0 && isSimpleProduct) ||
+      (this.state.quantity > 1 && !isSimpleProduct)
+    ) {
+      return (
         <div className="control-pannel">
           <div
-            onClick={isSimpleProduct ? this.decrease : null}
+            onClick={
+              isSimpleProduct
+                ? this.decrease
+                : () => {
+                    this.props.showOrderList();
+                  }
+            }
             className="btn-sub"
           >
             <ButtonDecrease mode="fill" isDisable={!isSimpleProduct} />
@@ -130,16 +166,23 @@ export default class ProductCard extends Component {
             <ButtonIncrease mode="fill" />
           </div>
         </div>
-      ) : (
+      );
+    }
+    if (this.state.quantity === 1 && !isSimpleProduct) {
+      return (
         <div className="control-pannel">
-          <div className="btn-plus-only">
-            <ButtonIncrease
-              onClick={isSimpleProduct ? this.increase : this.makeChoice}
-              mode="fill"
-            />
+          <div onClick={this.removerItem} className="btn-sub">
+            <ButtonDecrease mode="fill" isDisable={isSimpleProduct} />
+          </div>
+          <span className="number-quantity">{this.state.quantity}</span>
+          <div onClick={this.makeChoice} className="btn-plus">
+            <ButtonIncrease mode="fill" />
           </div>
         </div>
       );
+    }
+  }
+  render() {
     return (
       <div className="product-card">
         {this.state.isZoomInPic ? (
@@ -162,7 +205,7 @@ export default class ProductCard extends Component {
             <div className="price">${this.props.product.price}</div>
             {this.props.mode !== "menu" &&
             parseInt(this.props.product.status) === 1
-              ? Control_Pannel
+              ? this.renderControlPannel()
               : null}
             {this.renderSoldOutTag()}
           </div>

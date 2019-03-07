@@ -25,7 +25,6 @@ export default class ShoppingCart extends Component {
     this.toggleOrderList = this.toggleOrderList.bind(this);
     this.clearPreorderShoppingCart = this.clearPreorderShoppingCart.bind(this);
     this.reFetchOrderListFromServe = this.reFetchOrderListFromServe.bind(this);
-    this.debounceRun = this.debounceRun.bind(this);
   }
 
   componentWillMount() {
@@ -43,7 +42,8 @@ export default class ShoppingCart extends Component {
     this.setState({
       shoppingCartIconImage:
         "/table/public/images/layout/shopping_cart_icon.png",
-      shoppingCartList: this.props.shoppingCartList
+      shoppingCartList: this.props.shoppingCartList,
+      expand: this.props.shoppingCartExpand
     });
 
     if (this.props.mode === "preorder") {
@@ -82,8 +82,6 @@ export default class ShoppingCart extends Component {
     }
   }
 
-  debounceRun() {}
-
   reFetchOrderListFromServe() {
     console.log("called");
 
@@ -106,7 +104,8 @@ export default class ShoppingCart extends Component {
 
   componentWillReceiveProps(newProps) {
     this.setState({
-      shoppingCartList: newProps.shoppingCartList
+      shoppingCartList: newProps.shoppingCartList,
+      expand: newProps.shoppingCartExpand
     });
 
     if (this.props.mode === "table") {
@@ -159,15 +158,22 @@ export default class ShoppingCart extends Component {
    * toggle the order list details show/not show
    */
   showOrderList() {
-    this.setState({ expand: true });
+    this.props.showOrderList();
+    // this.setState({ expand: true });
   }
 
   closeOrderList() {
-    this.setState({ expand: false });
+    this.props.closeOrderList();
+    // this.setState({ expand: false });
   }
 
   toggleOrderList() {
-    this.setState({ expand: !this.state.expand });
+    if (this.state.expand) {
+      this.props.closeOrderList();
+    } else {
+      this.props.showOrderList();
+    }
+    // this.setState({ expand: !this.state.expand });
   }
 
   render() {

@@ -31288,6 +31288,18 @@ var App = function (_Component) {
         resultArr = arr.filter(function (ele) {
           return ele.quantity > 0;
         });
+      } else if (action === "remove") {
+        var _arr = this.state.shoppingCartList.map(function (orderItem) {
+          if (orderItem.item.product_id === item.product_id) {
+            return _extends({}, orderItem, { quantity: orderItem.quantity - 1 });
+          } else {
+            return orderItem;
+          }
+        });
+
+        resultArr = _arr.filter(function (ele) {
+          return ele.quantity > 0;
+        });
       }
 
       this.setState({ shoppingCartList: resultArr });
@@ -31363,7 +31375,7 @@ var App = function (_Component) {
         }).catch(function (err) {
           alert(err.response.data.message);
 
-          window.location.reload();
+          // window.location.reload();
         });
       }
     }
@@ -69216,10 +69228,13 @@ var Order = function (_Component) {
       categoryList: [],
       productGroupList: [],
       navBarItems: [],
-      shoppingCartList: []
+      shoppingCartList: [],
+      shoppingCartExpand: false
     };
 
     _this.redirectToMenu = _this.redirectToMenu.bind(_this);
+    _this.showOrderList = _this.showOrderList.bind(_this);
+    _this.closeOrderList = _this.closeOrderList.bind(_this);
     return _this;
   }
 
@@ -69268,6 +69283,16 @@ var Order = function (_Component) {
     key: "redirectToMenu",
     value: function redirectToMenu(msg) {
       this.props.history.push("/table/public/menu/" + msg);
+    }
+  }, {
+    key: "closeOrderList",
+    value: function closeOrderList() {
+      this.setState({ shoppingCartExpand: false });
+    }
+  }, {
+    key: "showOrderList",
+    value: function showOrderList() {
+      this.setState({ shoppingCartExpand: true });
     }
   }, {
     key: "render",
@@ -69341,7 +69366,8 @@ var Order = function (_Component) {
                     app_conf: _this3.props.app_conf,
                     mode: _this3.props.mode,
                     orderId: _this3.props.match.params.orderid,
-                    tableNumber: _this3.props.match.params.table
+                    tableNumber: _this3.props.match.params.table,
+                    showOrderList: _this3.showOrderList
                   });
                 })
               );
@@ -69349,6 +69375,9 @@ var Order = function (_Component) {
           )
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5__ShoppingCart__["a" /* default */], {
+          shoppingCartExpand: this.state.shoppingCartExpand,
+          closeOrderList: this.closeOrderList,
+          showOrderList: this.showOrderList,
           app_conf: this.props.app_conf,
           shoppingCartList: this.state.shoppingCartList,
           increaseShoppingCartItem: this.props.increaseShoppingCartItem,
@@ -70905,6 +70934,8 @@ var ProductCard = function (_Component) {
     _this.getProductQtyInOrderList = _this.getProductQtyInOrderList.bind(_this);
     _this.changePicSize = _this.changePicSize.bind(_this);
     _this.renderSoldOutTag = _this.renderSoldOutTag.bind(_this);
+    _this.renderControlPannel = _this.renderControlPannel.bind(_this);
+    _this.removerItem = _this.removerItem.bind(_this);
     return _this;
   }
 
@@ -70983,55 +71014,95 @@ var ProductCard = function (_Component) {
       this.props.updateShoppingCartList(true, this.props.product, this.props.mode, "sub", this.props.orderId, this.props.tableNumber);
     }
   }, {
-    key: "render",
-    value: function render() {
+    key: "removerItem",
+    value: function removerItem() {
+      this.props.updateShoppingCartList(true, this.props.product, this.props.mode, "remove", this.props.orderId, this.props.tableNumber);
+    }
+  }, {
+    key: "renderControlPannel",
+    value: function renderControlPannel() {
       var _this3 = this;
 
-      var isSimpleProduct = this.props.product.options.length == 0 && this.props.product.choices.length == 0 ? true : false;
+      var isSimpleProduct = this.props.product.options.length === 0 && this.props.product.choices.length === 0 ? true : false;
+      // product not being ordered yet, only add button appear
+      if (this.state.quantity <= 0) {
+        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "div",
+          { className: "control-pannel" },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            "div",
+            { className: "btn-plus-only" },
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__ButtonIncrease__["a" /* default */], {
+              onClick: isSimpleProduct ? this.increase : this.makeChoice,
+              mode: "fill"
+            })
+          )
+        );
+      }
+      // product is ordered, show 1. decrease button 2. quantity 3. increase button
+      if (this.state.quantity > 0 && isSimpleProduct || this.state.quantity > 1 && !isSimpleProduct) {
+        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "div",
+          { className: "control-pannel" },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            "div",
+            {
+              onClick: isSimpleProduct ? this.decrease : function () {
+                _this3.props.showOrderList();
+              },
+              className: "btn-sub"
+            },
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__ButtonDecrease__["a" /* default */], { mode: "fill", isDisable: !isSimpleProduct })
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            "span",
+            { className: "number-quantity" },
+            this.state.quantity
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            "div",
+            {
+              onClick: isSimpleProduct ? this.increase : this.makeChoice,
+              className: "btn-plus"
+            },
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__ButtonIncrease__["a" /* default */], { mode: "fill" })
+          )
+        );
+      }
+      if (this.state.quantity === 1 && !isSimpleProduct) {
+        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "div",
+          { className: "control-pannel" },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            "div",
+            { onClick: this.removerItem, className: "btn-sub" },
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__ButtonDecrease__["a" /* default */], { mode: "fill", isDisable: isSimpleProduct })
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            "span",
+            { className: "number-quantity" },
+            this.state.quantity
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            "div",
+            { onClick: this.makeChoice, className: "btn-plus" },
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__ButtonIncrease__["a" /* default */], { mode: "fill" })
+          )
+        );
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this4 = this;
 
-      var Control_Pannel = this.state.quantity > 0 ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        "div",
-        { className: "control-pannel" },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          "div",
-          {
-            onClick: isSimpleProduct ? this.decrease : null,
-            className: "btn-sub"
-          },
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3__ButtonDecrease__["a" /* default */], { mode: "fill", isDisable: !isSimpleProduct })
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          "span",
-          { className: "number-quantity" },
-          this.state.quantity
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          "div",
-          {
-            onClick: isSimpleProduct ? this.increase : this.makeChoice,
-            className: "btn-plus"
-          },
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__ButtonIncrease__["a" /* default */], { mode: "fill" })
-        )
-      ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        "div",
-        { className: "control-pannel" },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          "div",
-          { className: "btn-plus-only" },
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__ButtonIncrease__["a" /* default */], {
-            onClick: isSimpleProduct ? this.increase : this.makeChoice,
-            mode: "fill"
-          })
-        )
-      );
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         "div",
         { className: "product-card" },
         this.state.isZoomInPic ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4__ProductDetails__["a" /* default */], {
           product: this.props.product,
           close: function close() {
-            _this3.setState({ isZoomInPic: false });
+            _this4.setState({ isZoomInPic: false });
           }
         }) : null,
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -71059,7 +71130,7 @@ var ProductCard = function (_Component) {
               "$",
               this.props.product.price
             ),
-            this.props.mode !== "menu" && parseInt(this.props.product.status) === 1 ? Control_Pannel : null,
+            this.props.mode !== "menu" && parseInt(this.props.product.status) === 1 ? this.renderControlPannel() : null,
             this.renderSoldOutTag()
           )
         ),
@@ -71554,7 +71625,6 @@ var ShoppingCart = function (_Component) {
     _this.toggleOrderList = _this.toggleOrderList.bind(_this);
     _this.clearPreorderShoppingCart = _this.clearPreorderShoppingCart.bind(_this);
     _this.reFetchOrderListFromServe = _this.reFetchOrderListFromServe.bind(_this);
-    _this.debounceRun = _this.debounceRun.bind(_this);
     return _this;
   }
 
@@ -71579,7 +71649,8 @@ var ShoppingCart = function (_Component) {
 
       this.setState({
         shoppingCartIconImage: "/table/public/images/layout/shopping_cart_icon.png",
-        shoppingCartList: this.props.shoppingCartList
+        shoppingCartList: this.props.shoppingCartList,
+        expand: this.props.shoppingCartExpand
       });
 
       if (this.props.mode === "preorder") {
@@ -71614,9 +71685,6 @@ var ShoppingCart = function (_Component) {
       }
     }
   }, {
-    key: "debounceRun",
-    value: function debounceRun() {}
-  }, {
     key: "reFetchOrderListFromServe",
     value: function reFetchOrderListFromServe() {
       var _this3 = this;
@@ -71641,7 +71709,8 @@ var ShoppingCart = function (_Component) {
     key: "componentWillReceiveProps",
     value: function componentWillReceiveProps(newProps) {
       this.setState({
-        shoppingCartList: newProps.shoppingCartList
+        shoppingCartList: newProps.shoppingCartList,
+        expand: newProps.shoppingCartExpand
       });
 
       if (this.props.mode === "table") {
@@ -71704,17 +71773,24 @@ var ShoppingCart = function (_Component) {
   }, {
     key: "showOrderList",
     value: function showOrderList() {
-      this.setState({ expand: true });
+      this.props.showOrderList();
+      // this.setState({ expand: true });
     }
   }, {
     key: "closeOrderList",
     value: function closeOrderList() {
-      this.setState({ expand: false });
+      this.props.closeOrderList();
+      // this.setState({ expand: false });
     }
   }, {
     key: "toggleOrderList",
     value: function toggleOrderList() {
-      this.setState({ expand: !this.state.expand });
+      if (this.state.expand) {
+        this.props.closeOrderList();
+      } else {
+        this.props.showOrderList();
+      }
+      // this.setState({ expand: !this.state.expand });
     }
   }, {
     key: "render",

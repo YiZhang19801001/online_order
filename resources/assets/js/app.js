@@ -136,6 +136,16 @@ export default class App extends Component {
       });
 
       resultArr = arr.filter(ele => ele.quantity > 0);
+    } else if (action === "remove") {
+      const arr = this.state.shoppingCartList.map(orderItem => {
+        if (orderItem.item.product_id === item.product_id) {
+          return { ...orderItem, quantity: orderItem.quantity - 1 };
+        } else {
+          return orderItem;
+        }
+      });
+
+      resultArr = arr.filter(ele => ele.quantity > 0);
     }
 
     this.setState({ shoppingCartList: resultArr });
@@ -214,7 +224,7 @@ export default class App extends Component {
       }).catch(err => {
         alert(err.response.data.message);
 
-        window.location.reload();
+        // window.location.reload();
       });
     }
   }

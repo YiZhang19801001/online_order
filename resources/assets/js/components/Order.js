@@ -14,10 +14,13 @@ export default class Order extends Component {
       categoryList: [],
       productGroupList: [],
       navBarItems: [],
-      shoppingCartList: []
+      shoppingCartList: [],
+      shoppingCartExpand: false
     };
 
     this.redirectToMenu = this.redirectToMenu.bind(this);
+    this.showOrderList = this.showOrderList.bind(this);
+    this.closeOrderList = this.closeOrderList.bind(this);
   }
 
   componentDidMount() {
@@ -69,6 +72,13 @@ export default class Order extends Component {
 
   redirectToMenu(msg) {
     this.props.history.push(`/table/public/menu/${msg}`);
+  }
+
+  closeOrderList() {
+    this.setState({ shoppingCartExpand: false });
+  }
+  showOrderList() {
+    this.setState({ shoppingCartExpand: true });
   }
 
   render() {
@@ -142,6 +152,7 @@ export default class Order extends Component {
                         mode={this.props.mode}
                         orderId={this.props.match.params.orderid}
                         tableNumber={this.props.match.params.table}
+                        showOrderList={this.showOrderList}
                       />
                     );
                   })}
@@ -151,6 +162,9 @@ export default class Order extends Component {
           </div>
         </div>
         <ShoppingCart
+          shoppingCartExpand={this.state.shoppingCartExpand}
+          closeOrderList={this.closeOrderList}
+          showOrderList={this.showOrderList}
           app_conf={this.props.app_conf}
           shoppingCartList={this.state.shoppingCartList}
           increaseShoppingCartItem={this.props.increaseShoppingCartItem}
