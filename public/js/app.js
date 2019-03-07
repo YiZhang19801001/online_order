@@ -31445,7 +31445,8 @@ var App = function (_Component) {
                 originPath: _this3.state.originPath,
                 v: _this3.state.v,
                 lang: _this3.state.lang,
-                userId: _this3.state.userId
+                userId: _this3.state.userId,
+                cdt: _this3.state.cdt
               }, props));
             }
           }),
@@ -31480,19 +31481,6 @@ var App = function (_Component) {
             path: "/table/public/mycon",
             render: function render(props) {
               return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_9__components_Setting__["a" /* default */], _extends({ app_conf: _this3.state.app_conf }, props));
-            }
-          }),
-          __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router_dom__["c" /* Route */], {
-            exact: true,
-            patch: "/table/public/mytest",
-            render: function render(props) {
-              return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_10__components_MyTest__["a" /* default */], _extends({
-                app_conf: _this3.state.app_conf,
-                userId: _this3.state.userId,
-                lang: _this3.state.lang,
-                shoppingCartList: _this3.state.shoppingCartList,
-                updateShoppingCartList: _this3.updateShoppingCartList
-              }, props));
             }
           }),
           __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router_dom__["c" /* Route */], {
@@ -72014,6 +72002,7 @@ var Confirm = function (_Component) {
           total: this.getTotalPrice(),
           paymentMethod: "Dive in",
           v: this.props.v,
+          cdt: this.props.cdt,
           lang: this.props.lang,
           userId: this.props.userId
         }).then(function (res) {
@@ -72024,14 +72013,11 @@ var Confirm = function (_Component) {
             var alertText = _this2.props.app_conf.sorry + ", " + res.data.message + " " + _this2.props.app_conf.soldout_notify_when_confirm;
             console.log(alertText);
             window.alert(alertText);
-
             _this2.props.history.push(_this2.props.originPath);
-
             window.location.reload();
           }
         }).catch(function (err) {
-          // window.location.reload();
-          console.log(err.response);
+          _this2.props.history.push("/table/public/menu/" + err.response.data.message);
         });
       }
     }
@@ -74444,7 +74430,7 @@ var MyTest = function (_React$Component) {
   return MyTest;
 }(__WEBPACK_IMPORTED_MODULE_1_react___default.a.Component);
 
-/* harmony default export */ __webpack_exports__["a"] = (MyTest);
+/* unused harmony default export */ var _unused_webpack_default_export = (MyTest);
 
 /***/ }),
 /* 308 */

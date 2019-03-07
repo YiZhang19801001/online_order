@@ -104,6 +104,7 @@ export default class Confirm extends Component {
         total: this.getTotalPrice(),
         paymentMethod: "Dive in",
         v: this.props.v,
+        cdt: this.props.cdt,
         lang: this.props.lang,
         userId: this.props.userId
       })
@@ -121,15 +122,14 @@ export default class Confirm extends Component {
             } ${this.props.app_conf.soldout_notify_when_confirm}`;
             console.log(alertText);
             window.alert(alertText);
-
             this.props.history.push(this.props.originPath);
-
             window.location.reload();
           }
         })
         .catch(err => {
-          // window.location.reload();
-          console.log(err.response);
+          this.props.history.push(
+            `/table/public/menu/${err.response.data.message}`
+          );
         });
     }
   }

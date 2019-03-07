@@ -294,6 +294,7 @@ export default class App extends Component {
                 v={this.state.v}
                 lang={this.state.lang}
                 userId={this.state.userId}
+                cdt={this.state.cdt}
                 {...props}
               />
             )}
@@ -330,7 +331,7 @@ export default class App extends Component {
               <Setting app_conf={this.state.app_conf} {...props} />
             )}
           />
-          <Route
+          {/* <Route
             exact
             patch="/table/public/mytest"
             render={props => (
@@ -343,7 +344,7 @@ export default class App extends Component {
                 {...props}
               />
             )}
-          />
+          /> */}
 
           <Route
             exact
