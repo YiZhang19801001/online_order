@@ -55,7 +55,9 @@ return [
     // sold out tag
     'sold_out' => '今日售罄',
     // sorry
-    'sorry'=>'抱歉',
-    // sold out notify 
-    'soldout_notify_when_confirm'=>'已售罄，我们已经调整了您的订单，请确定后再次发送，谢谢合作'
+    'sorry' => '抱歉',
+    // sold out notify
+    'soldout_notify_when_confirm' => '已售罄，我们已经调整了您的订单，请确定后再次发送，谢谢合作',
+    //
+    'notifyAlreadySent' => '您的订单已发送',
 ];

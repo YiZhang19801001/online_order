@@ -71508,7 +71508,7 @@ var ChoiceGroup = function (_Component) {
                 "label",
                 { className: "choice-group__content-container" },
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", {
-                  type: "checkbox",
+                  type: "radio",
                   name: _this2.props.choiceGroup.type,
                   value: JSON.stringify(choice),
                   onChange: _this2.setChoice
@@ -72105,12 +72105,17 @@ var Confirm = function (_Component) {
           lang: this.props.lang,
           userId: this.props.userId
         }).then(function (res) {
-          if (res.data.status !== "reject") {
+          if (res.data.status === "commited") {
             _this2.props.updateHistoryCartList(res.data.historyList);
             _this2.props.history.push("/table/public/complete/" + _this2.props.match.params.tableId + "/" + _this2.props.match.params.orderId);
+          } else if (res.data.status === "pending list is empty") {
+            _this2.props.updateHistoryCartList(res.data.historyList);
+            window.alert(_this2.props.app_conf.notifyAlreadySent);
+            _this2.props.history.push(_this2.props.originPath);
+            window.location.reload();
           } else {
             var alertText = _this2.props.app_conf.sorry + ", " + res.data.message + " " + _this2.props.app_conf.soldout_notify_when_confirm;
-            console.log(alertText);
+
             window.alert(alertText);
             _this2.props.history.push(_this2.props.originPath);
             window.location.reload();

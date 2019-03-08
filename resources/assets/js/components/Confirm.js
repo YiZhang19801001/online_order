@@ -109,18 +109,23 @@ export default class Confirm extends Component {
         userId: this.props.userId
       })
         .then(res => {
-          if (res.data.status !== "reject") {
+          if (res.data.status === "commited") {
             this.props.updateHistoryCartList(res.data.historyList);
             this.props.history.push(
               `/table/public/complete/${this.props.match.params.tableId}/${
                 this.props.match.params.orderId
               }`
             );
+          } else if (res.data.status === "pending list is empty") {
+            this.props.updateHistoryCartList(res.data.historyList);
+            window.alert(this.props.app_conf.notifyAlreadySent);
+            this.props.history.push(this.props.originPath);
+            window.location.reload();
           } else {
             const alertText = `${this.props.app_conf.sorry}, ${
               res.data.message
             } ${this.props.app_conf.soldout_notify_when_confirm}`;
-            console.log(alertText);
+
             window.alert(alertText);
             this.props.history.push(this.props.originPath);
             window.location.reload();
