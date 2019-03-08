@@ -560,8 +560,9 @@ class OrderController extends Controller
 
         //create record in oc_table_linksub
         $this->createOrderLinkSubHelper($new_order, $request->v);
+        $orderList_string = json_encode($orderList);
 
-
+        \Log::info("new order created: order_id:$request->orderId ,content:$orderList_string");
 
         broadcast(new UpdateOrder($request->order_id, null, $request->userId, 'update'));
 
@@ -709,7 +710,7 @@ class OrderController extends Controller
         $new_order_history = new OrderHistory;
         $new_order_history->order_id = $order_id;
         $new_order_history->notify = 0;
-        //Todo: read from new order??
+
         $new_order_history->order_status_id = 1;
         $new_order_history->comment = " ";
         $new_order_history->date_added = $dt->format("y-m-d h:i:s");
@@ -807,6 +808,10 @@ class OrderController extends Controller
     {
         $mode = config('app.show_options');
         $new_item = $request->orderItem;
+
+         $order_item_string = $request->orderItem["name"];
+        \Log::info("order_id:$request->orderId, table_no:$request->tableId,user: $request->userId, action: $request->action, item: $order_item_string"); 
+
         if($request->action !== "remove"){
 
             $new_item = $this->dryOrderItem($request->orderItem);
