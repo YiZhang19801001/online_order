@@ -808,6 +808,7 @@ class OrderController extends Controller
     {
         $mode = config('app.show_options');
         $new_item = $request->orderItem;
+        \DB::beginTransaction();
 
          $order_item_string = $request->orderItem["name"];
         \Log::info("order_id:$request->orderId, table_no:$request->tableId,user: $request->userId, action: $request->action, item: $order_item_string"); 
@@ -816,7 +817,11 @@ class OrderController extends Controller
 
             $new_item = $this->dryOrderItem($request->orderItem);
         }
-        $orderRow = TempOrder::where('id', $request->orderId)->first();
+
+
+        $orderRow = \App\TempOrder::lockForUpdate()->find($request->orderId);
+
+
 
         // check product is active or not
         if($request->action ==="add"){
@@ -887,6 +892,8 @@ class OrderController extends Controller
         }
         // $abcArr = json_decode($orderRow->order_list_string);
         $orderRow->save();
+            \DB::commit();
+
         broadcast(new UpdateOrder($request->orderId, $request->orderItem, $request->userId, $request->action));
         return response()->json(compact("orderRow"), 200);
     }
