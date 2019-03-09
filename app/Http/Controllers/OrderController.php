@@ -562,7 +562,7 @@ class OrderController extends Controller
         $this->createOrderLinkSubHelper($new_order, $request->v);
         $orderList_string = json_encode($orderList);
 
-        \Log::info("new order created: order_id:$request->orderId ,content:$orderList_string");
+        \Log::info("new order created: order_id:$request->order_id ,content:$orderList_string");
 
         broadcast(new UpdateOrder($request->order_id, null, $request->userId, 'update'));
 
