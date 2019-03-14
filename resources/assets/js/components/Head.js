@@ -6,6 +6,7 @@ export default class Head extends Component {
   constructor(props) {
     super(props);
     this.changeLanguage = this.changeLanguage.bind(this);
+    this.renderPowerBy = this.renderPowerBy.bind(this);
   }
 
   changeLanguage() {
@@ -48,6 +49,15 @@ export default class Head extends Component {
     }
   }
 
+  renderPowerBy() {
+    return (
+      <div className="power-by">
+        <span>power by</span>
+        <img src="http://www.aupos.com.au/wp-content/uploads/2017/03/logo-large_stroke.png" />
+      </div>
+    );
+  }
+
   render() {
     return (
       <div className="head">
@@ -58,6 +68,7 @@ export default class Head extends Component {
               <span className="label">{this.props.btnLabel}</span>
             </span>
           ) : null}
+          {this.renderPowerBy()}
         </div>
       </div>
     );

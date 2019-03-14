@@ -17,6 +17,44 @@ body {
   display: none;
 }
 
+.power-by {
+  height: 15px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: absolute;
+  top: 11vh;
+  right: 3px;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-transform: uppercase;
+}
+
+.power-by img {
+  height: 100%;
+}
+
+.power-by span {
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+  padding-bottom: 3px;
+  font-size: 6px;
+  color: #8c8c8c;
+  line-height: initial;
+}
+
 .setting-form {
   display: -webkit-box;
   display: -ms-flexbox;

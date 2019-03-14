@@ -30788,7 +30788,6 @@ var Head = function (_Component) {
     var _this = _possibleConstructorReturn(this, (Head.__proto__ || Object.getPrototypeOf(Head)).call(this, props));
 
     _this.changeLanguage = _this.changeLanguage.bind(_this);
-    _this.renderPowerBy = _this.renderPowerBy.bind(_this);
     return _this;
   }
 
@@ -30823,20 +30822,6 @@ var Head = function (_Component) {
       }
     }
   }, {
-    key: "renderPowerBy",
-    value: function renderPowerBy() {
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        "div",
-        { className: "power-by" },
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          "span",
-          null,
-          "power by"
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("img", { src: "http://www.aupos.com.au/wp-content/uploads/2017/03/logo-large_stroke.png" })
-      );
-    }
-  }, {
     key: "render",
     value: function render() {
       return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -30858,8 +30843,7 @@ var Head = function (_Component) {
               { className: "label" },
               this.props.btnLabel
             )
-          ) : null,
-          this.renderPowerBy()
+          ) : null
         )
       );
     }
