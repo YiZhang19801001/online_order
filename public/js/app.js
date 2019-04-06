@@ -30831,7 +30831,7 @@ var Head = function (_Component) {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "span",
           null,
-          "power by"
+          "powered by"
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("img", { src: "http://www.aupos.com.au/wp-content/uploads/2017/03/logo-large_stroke.png" })
       );
@@ -71205,8 +71205,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -71289,7 +71287,7 @@ var ChoiceForm = function (_Component) {
     value: function updateOrderItemChoice(pickedChoice, action) {
       if (action) {
         this.setState({
-          pickedChoice: [].concat(_toConsumableArray(this.state.pickedChoice), [pickedChoice])
+          pickedChoice: [pickedChoice]
         });
       } else {
         this.setState({

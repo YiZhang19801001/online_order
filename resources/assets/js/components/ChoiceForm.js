@@ -64,7 +64,7 @@ export default class ChoiceForm extends Component {
   updateOrderItemChoice(pickedChoice, action) {
     if (action) {
       this.setState({
-        pickedChoice: [...this.state.pickedChoice, pickedChoice]
+        pickedChoice: [pickedChoice]
       });
     } else {
       this.setState({

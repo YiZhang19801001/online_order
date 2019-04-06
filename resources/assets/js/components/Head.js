@@ -52,7 +52,7 @@ export default class Head extends Component {
   renderPowerBy() {
     return (
       <div className="power-by">
-        <span>power by</span>
+        <span>powered by</span>
         <img src="http://www.aupos.com.au/wp-content/uploads/2017/03/logo-large_stroke.png" />
       </div>
     );
