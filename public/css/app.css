@@ -555,6 +555,11 @@ body {
   color: #333333;
 }
 
+.product-card .product-info .price-quantity .price .defaultPriceTag {
+  color: #a5a5a5;
+  font-size: 0.5rem;
+}
+
 .product-card .product-info .price-quantity .control-pannel {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1259,7 +1264,7 @@ input:checked
   -webkit-box-flex: 2;
   -ms-flex: 2;
   flex: 2;
-  height: 57px;
+  height: auto;
 }
 
 .order-item-card .order-item-card__info-container .order-item-card__item-name {
@@ -1277,8 +1282,7 @@ input:checked
 .order-item-card
 .order-item-card__info-container
 .order-item-card__choices__pickedChoice-price {
-  height: 13px;
-  line-height: 13px;
+  height: auto;
   font-size: 10px;
   color: #444444;
 }
@@ -1289,6 +1293,9 @@ input:checked
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
 .order-item-card .order-item-card__quantity-control-container {

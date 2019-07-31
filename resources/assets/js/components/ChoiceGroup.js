@@ -88,7 +88,7 @@ export default class ChoiceGroup extends Component {
               >
                 <label className="choice-group__content-container">
                   <input
-                    type="radio"
+                    type="checkbox"
                     name={this.props.choiceGroup.type}
                     value={JSON.stringify(choice)}
                     onChange={this.setChoice}
@@ -99,7 +99,7 @@ export default class ChoiceGroup extends Component {
                       style={{
                         backgroundImage: `url("/table/public/images/items/${
                           choice.image
-                        }")`
+                          }")`
                       }}
                     />
                     <div className={this.state.choiceClass.iconCover} />

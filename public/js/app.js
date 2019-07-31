@@ -71166,7 +71166,12 @@ var ProductCard = function (_Component) {
             __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
               "div",
               { className: "price" },
-              "$",
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                "span",
+                { className: "defaultPriceTag" },
+                this.props.app_conf.defaultPriceTag
+              ),
+              " $",
               this.props.product.price
             ),
             this.props.mode !== "menu" && parseInt(this.props.product.status) === 1 ? this.renderControlPannel() : null,
@@ -71204,6 +71209,8 @@ var ProductCard = function (_Component) {
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -71287,7 +71294,7 @@ var ChoiceForm = function (_Component) {
     value: function updateOrderItemChoice(pickedChoice, action) {
       if (action) {
         this.setState({
-          pickedChoice: [pickedChoice]
+          pickedChoice: [].concat(_toConsumableArray(this.state.pickedChoice), [pickedChoice])
         });
       } else {
         this.setState({
@@ -71522,7 +71529,7 @@ var ChoiceGroup = function (_Component) {
                 "label",
                 { className: "choice-group__content-container" },
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", {
-                  type: "radio",
+                  type: "checkbox",
                   name: _this2.props.choiceGroup.type,
                   value: JSON.stringify(choice),
                   onChange: _this2.setChoice

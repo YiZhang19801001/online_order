@@ -123,7 +123,7 @@ export default class ProductCard extends Component {
   renderControlPannel() {
     const isSimpleProduct =
       this.props.product.options.length === 0 &&
-      this.props.product.choices.length === 0
+        this.props.product.choices.length === 0
         ? true
         : false;
     // product not being ordered yet, only add button appear
@@ -151,8 +151,8 @@ export default class ProductCard extends Component {
               isSimpleProduct
                 ? this.decrease
                 : () => {
-                    this.props.showOrderList();
-                  }
+                  this.props.showOrderList();
+                }
             }
             className="btn-sub"
           >
@@ -202,9 +202,9 @@ export default class ProductCard extends Component {
         <div className="product-info">
           <div className="product-name">{this.props.product.name}</div>
           <div className="price-quantity">
-            <div className="price">${this.props.product.price}</div>
+            <div className="price"><span className={`defaultPriceTag`}>{this.props.app_conf.defaultPriceTag}</span> ${this.props.product.price}</div>
             {this.props.mode !== "menu" &&
-            parseInt(this.props.product.status) === 1
+              parseInt(this.props.product.status) === 1
               ? this.renderControlPannel()
               : null}
             {this.renderSoldOutTag()}

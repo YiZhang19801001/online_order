@@ -456,6 +456,10 @@ body {
   font-size: 15px;
   font-weight: 600;
   color: #333333;
+  .defaultPriceTag{
+    color:#a5a5a5;
+    font-size: 0.5rem;
+  }
 }
 
 .product-card .product-info .price-quantity .control-pannel {
@@ -1143,7 +1147,7 @@ body {
   -webkit-box-flex: 2;
   -ms-flex: 2;
   flex: 2;
-  height: 57px;
+  height: auto;
 }
 
 .order-item-card .order-item-card__info-container .order-item-card__item-name {
@@ -1161,8 +1165,8 @@ body {
 .order-item-card
   .order-item-card__info-container
   .order-item-card__choices__pickedChoice-price {
-  height: 13px;
-  line-height: 13px;
+  height: auto;
+  // line-height: ;
   font-size: 10px;
   color: #444444;
 }
@@ -1173,6 +1177,7 @@ body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  justify-content: space-between;
 }
 
 .order-item-card .order-item-card__quantity-control-container {
